@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
+
+body {
+  font-family: "Open Sans", sans-serif;
+    @apply font-sans;
+}
+@layer components {
+  .submit-btn {
+    @apply bg-[#F6CD28] text-black font-bold text-[16px] py-2 px-5 rounded-lg;
+  }
+  .cancel-btn {
+    @apply bg-[#FFF] text-[#F6CD28] font-bold text-[16px] py-2 px-5 rounded-lg  border-2 border-primary;
+  }
+  .danger-btn {
+    @apply bg-danger text-white font-bold text-[16px] py-2 px-5 rounded-lg;
+  }
+  .primary-btn{
+    @apply bg-blue-500 text-white font-bold text-[16px] py-2 px-5 rounded-lg;
+  }
+
+  .tab_submit-btn {
+    @apply bg-[#F6CD28] text-black font-bold text-[14px] py-[0.6rem] px-[0.75rem] rounded-lg;
+  }
+  .tab_cancel-btn {
+    @apply bg-[#FFF] text-[#F6CD28] font-bold text-[14px] py-[0.6rem] px-[0.75rem] rounded-lg  border-2 border-primary;
+  }
+  .tab_danger-btn {
+    @apply bg-danger text-white font-bold text-[14px] py-[0.6rem] px-[0.75rem] rounded-lg;
+  }
+  .tab_primary-btn{
+    @apply bg-blue-500 text-white font-bold text-[14px] py-[0.6rem] px-[0.75rem] rounded-lg;
+  }
+
+  .mobile_submit-btn {
+    @apply bg-[#F6CD28] text-black font-bold text-[12px] py-[0.5rem] px-[0.6rem] rounded-lg;
+  }
+  .mobile_cancel-btn {
+    @apply bg-[#FFF] text-[#F6CD28] font-bold text-[12px] py-[0.5rem] px-[0.6rem] rounded-lg  border-2 border-primary;
+  }
+  .mobile_danger-btn {
+    @apply bg-danger text-white font-bold text-[12px] py-[0.5rem] px-[0.6rem] rounded-lg;
+  }
+  .mobile_primary-btn {
+    @apply bg-blue-500 text-white font-bold text-[12px] py-[0.5rem] px-[0.6rem] rounded-lg;
+  }
+
+  .xl_input_labels {
+    @apply bg-white rounded w-[15rem] pl-4 py-1 text-[#A0AEC0] outline-none;
+  }
+  .lg_input_labels {
+    @apply bg-white rounded w-[10rem] pl-4 py-1 text-[#A0AEC0] outline-none;
+  }
+  .md_input_labels {
+    @apply bg-white rounded w-[8rem] pl-4 py-1 text-[#A0AEC0] outline-none;
+  }
+  .sm_input_labels {
+    @apply bg-white rounded w-[50%] pl-4 py-1 text-[#A0AEC0] outline-none;
+  }
+  .input_labels {
+    @apply bg-white rounded w-[50%] pl-4 py-1 text-[#A0AEC0] outline-none;
+  }
+  .sm_div_between_inputs {
+    @apply w-[48%] flex justify-between items-center;
+  }
+  .div_between_inputs {
+    @apply w-[100%] flex justify-between items-center;
+  }
+}
