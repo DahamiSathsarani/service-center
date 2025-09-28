@@ -132,7 +132,7 @@ const VehicleInventoryForm = ({ type }) => {
       <div className="space-y-6 items-center align-middle">
         <div className="grid grid-cols-3 gap-8 font-bold text-gray-700 border-b pb-2">
           <div>Item</div>
-          <div>No of Items In</div>
+          <div className={`${type === "update" ? "hidden" : "block"}`}>No of Items In</div>
           <div className={`${type === "update" ? "block" : "hidden"}`}>
             No of Items Out
           </div>
@@ -145,8 +145,8 @@ const VehicleInventoryForm = ({ type }) => {
           >
             <div className="text-gray-800">{itemData.item}</div>
 
+           {type === "create" && (
             <div className="flex items-center text-center space-x-6">
-              {type === "create" ? (
                 <>
                   <button
                     type="button"
@@ -166,12 +166,8 @@ const VehicleInventoryForm = ({ type }) => {
                     +
                   </button>
                 </>
-              ) : (
-                <span className="text-center items-center w-4 px-8 font-bold">
-                  {itemData.no_of_items_in}
-                </span>
-              )}
             </div>
+           )}
 
             {type === "update" && (
               <div className="flex items-center text-center space-x-6">
