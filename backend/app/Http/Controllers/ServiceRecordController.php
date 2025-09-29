@@ -154,7 +154,6 @@ class ServiceRecordController extends Controller
             } else if ($user->role_id === 2) {
                 $data = ['user_id' => $user->user_id, 'status' => 'COMPLETED'];
                 $service_records = $this->servicerecordrepo->get($data, 'completed');
-
                     $today = Carbon::today()->toDateString();
                     $filteredRecords = collect($service_records)->filter(function ($record) use ($today) {
                         return Carbon::parse($record->date)->toDateString() === $today;
