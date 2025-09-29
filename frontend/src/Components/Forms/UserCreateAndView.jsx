@@ -69,7 +69,8 @@ export default function UserCreateAndView({ type, data }) {
       response = await update_user_details(formData);
 
       if (response.status === 200) {
-        set_userData({ ...response.data.user });
+        const updatedUser = response.data.user;
+        set_userData(updatedUser);
         localStorage.setItem(
           "userAction",
           JSON.stringify({ action: "updated" })
