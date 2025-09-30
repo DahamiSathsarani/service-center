@@ -115,7 +115,7 @@ export default function CustomerCreateAndView({
       }
     } else {
       try {
-        if (type === 'view') {
+        if (type === 'view' && status !== "update") {
           const requestData = {
             vehicle_number: vehicle_number,
             customer_id: data?.customer_id,

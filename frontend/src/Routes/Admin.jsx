@@ -13,7 +13,7 @@ import CustomerViewPage from "../Pages/advisor/CustomerViewPage";
 import CustomersViewPage from "../Pages/admin/CustomersViewPage";
 import CustomerCreatePage from "../Pages/advisor/CustomerCreatePage";
 import UserProfile from "../Pages/advisor/UserProfile";
-import AddNewCustomerPage from "../Pages/advisor/AddNewCustomerPage";
+import UpdateNewCustomerPage from "../Pages/advisor/UpdateNewCustomerPage";
 import VehicleViewPage from "../Pages/admin/VehicleViewPage";
 import VehicleCreatePage from "../Pages/advisor/VehicleCreatePage";
 import VehicleUpdatePage from "../Pages/admin/VehicleUpdatePage";
@@ -125,7 +125,7 @@ export default function Admin() {
               path="customer/:customer_id/update"
               element={
                 <ProtectedRoutes userRole={userRole} checkedRole={1}>
-                  <AddNewCustomerPage userRole="1" />
+                  <UpdateNewCustomerPage userRole="1" />
                 </ProtectedRoutes>
               }
             />
