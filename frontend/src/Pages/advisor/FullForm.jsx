@@ -205,8 +205,17 @@ export default function FullForm({ type, action }) {
             </div>
           </div>
         </div>
-        {action !== "view" && (
+        {action !== "view" && (    
           <div className="w-full flex flex-col sm:flex-row sm:justify-end mt-2 md:mt-5">
+            <button
+              className="mobile_cancel-btn  md:tab_cancel-btn lg:cancel-btn mr-3 w-full sm:w-auto mb-2 sm:mb-0"
+              type="button"
+              onClick={() => {
+                navigate('/advisor/dashboard');
+              }}
+            >
+              Cancel
+            </button>
             <button
               className="mobile_cancel-btn  md:tab_cancel-btn lg:cancel-btn mr-3 w-full sm:w-auto mb-2 sm:mb-0"
               type="button"
@@ -214,7 +223,7 @@ export default function FullForm({ type, action }) {
                 navigate(-1);
               }}
             >
-              Cancel
+              Back
             </button>
             <button
               disabled={

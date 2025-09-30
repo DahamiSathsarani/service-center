@@ -98,8 +98,9 @@ const VehicleInventoryForm = ({ type }) => {
       } else if (type === "update") {
         response = await inventory_update(formData);
       }
+      console.log(response.status,"response.status")
       if (response.status === 200) {
-        toast.success(response.data.message || "Records updated successfully");
+        toast.success( "Records updated successfully");
         if (type === "create") {
           if (serviceRecordType === "Full Service") {
             navigate(`/advisor/service-record/${service_no}/service-inventory`);
@@ -113,6 +114,7 @@ const VehicleInventoryForm = ({ type }) => {
         toast.error(response.data.message || "Something went wrong!");
       }
     } catch (error) {
+      console.log("test")
       if (error.response && error.response.status === 422) {
         const errors = error.response.data;
         Object.keys(errors).forEach((key) => {

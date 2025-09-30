@@ -19,32 +19,26 @@ export default function CanvasComponent() {
     const updateCanvasSize = () => {
       if (window.innerWidth < 447) {
         setCanvasSize({ width: 200, height: 200 });
-      } 
-      else if (window.innerWidth < 495) {
+      } else if (window.innerWidth < 495) {
         setCanvasSize({ width: 300, height: 200 });
-      }else if (window.innerWidth < 600) {
+      } else if (window.innerWidth < 600) {
         setCanvasSize({ width: 350, height: 250 });
-      }
-       else if (window.innerWidth < 700) {
+      } else if (window.innerWidth < 700) {
         setCanvasSize({ width: 450, height: 280 });
-      }
-      else if (window.innerWidth < 870) {
+      } else if (window.innerWidth < 870) {
         setCanvasSize({ width: 500, height: 300 });
-      }
-      else if (window.innerWidth < 923) {
+      } else if (window.innerWidth < 923) {
         setCanvasSize({ width: 600, height: 320 });
-      }
-       else if (window.innerWidth < 1023) {
+      } else if (window.innerWidth < 1023) {
         setCanvasSize({ width: 650, height: 350 });
-      }
-       else if (window.innerWidth < 1100) {
+      } else if (window.innerWidth < 1100) {
         setCanvasSize({ width: 600, height: 320 });
       } else if (window.innerWidth < 1200) {
         setCanvasSize({ width: 650, height: 350 });
       } else if (window.innerWidth < 1300) {
-        setCanvasSize({ width: 750, height: 370});
+        setCanvasSize({ width: 750, height: 370 });
       } else if (window.innerWidth < 1400) {
-        setCanvasSize({width: 750, height: 370});
+        setCanvasSize({ width: 750, height: 370 });
       } else if (window.innerWidth < 1500) {
         setCanvasSize({ width: 750, height: 370 });
       } else {
@@ -161,16 +155,20 @@ export default function CanvasComponent() {
   return (
     <div className="w-[100%] h-[35rem] flex flex-col items-center justify-center bg-gray-200">
       <div className="flex justify-end items-center w-full h-[20%] ">
-        <button className="mobile_cancel-btn md:tab_cancel-btn lg:cancel-btn mr-3 w-full h-[50px] sm:w-auto mb-2 sm:mb-0" 
-                onClick={async () => {
-                  try {
-                    navigate(`/advisor/service-record/${service_no}/take-photo`);
-                  } catch (error) {
-                    toast.error(error.response.data.message || "Internal Error");
-                  }
-                }}>Take a Photo</button>
+        <button
+          className="mobile_cancel-btn md:tab_cancel-btn lg:cancel-btn mr-3 w-full h-[50px] sm:w-auto mb-2 sm:mb-0"
+          onClick={async () => {
+            try {
+              navigate(`/advisor/service-record/${service_no}/take-photo`);
+            } catch (error) {
+              toast.error(error.response.data.message || "Internal Error");
+            }
+          }}
+        >
+          Take a Photo
+        </button>
       </div>
-            
+
       <div className="w-[80%] h-[80%] flex flex-col items-center justify-center">
         <canvas
           ref={canvasRef}
@@ -187,21 +185,44 @@ export default function CanvasComponent() {
           onMouseLeave={stopDrawing}
         />
       </div>
-      <div className="w-full flex flex-col sm:flex-row sm:justify-end  px-10 mb-2">
-        <button
-          className="mobile_cancel-btn md:tab_cancel-btn lg:cancel-btn mr-3 w-full sm:w-auto mb-2 sm:mb-0"
-          type="button"
-          onClick={handleUndo}
-        >
-          Undo
-        </button>
-        <button
-          className="mobile_submit-btn md:tab_submit-btn lg:submit-btn w-full sm:w-auto"
-          type="submit"
-          onClick={handleSave}
-        >
-          Save
-        </button>
+      <div className="w-full flex flex-col sm:flex-row sm:justify-between  px-10 mb-2">
+        <div>
+          <button
+            className="mobile_cancel-btn  md:tab_cancel-btn lg:cancel-btn mr-3 w-full sm:w-auto mb-2 sm:mb-0"
+            type="button"
+            onClick={() => {
+              navigate("/advisor/dashboard");
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            className="mobile_cancel-btn  md:tab_cancel-btn lg:cancel-btn mr-3 w-full sm:w-auto mb-2 sm:mb-0"
+            type="button"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            Back
+          </button>
+        </div>
+
+        <div>
+          <button
+            className="mobile_cancel-btn md:tab_cancel-btn lg:cancel-btn mr-3 w-full sm:w-auto mb-2 sm:mb-0"
+            type="button"
+            onClick={handleUndo}
+          >
+            Undo
+          </button>
+          <button
+            className="mobile_submit-btn md:tab_submit-btn lg:submit-btn w-full sm:w-auto"
+            type="submit"
+            onClick={handleSave}
+          >
+            Save
+          </button>
+        </div>
       </div>
     </div>
   );

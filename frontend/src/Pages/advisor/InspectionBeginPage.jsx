@@ -17,6 +17,14 @@ export default function InspectionBeginPage() {
       <div
         className= "flex w-full mt-5 justify-end" 
       >
+         <button
+          className="cancel-btn me-5"
+          onClick={() => {
+            navigate('/advisor/dashboard');
+          }}
+        >
+          Cancel
+        </button>
         <button
           className="cancel-btn me-5"
           onClick={() => {
