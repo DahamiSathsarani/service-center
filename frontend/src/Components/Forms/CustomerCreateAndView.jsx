@@ -3,7 +3,10 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { customer_create, update_customer } from "../../Api/CustomerAPI";
-import { create_update_new_customer, update_new_customer } from "../../Api/OldCustomerAPI";
+import {
+  create_update_new_customer,
+  update_new_customer,
+} from "../../Api/OldCustomerAPI";
 
 export default function CustomerCreateAndView({
   type,
@@ -23,16 +26,15 @@ export default function CustomerCreateAndView({
     house_number: "",
     street_name: "",
     city: "",
-    state: "",
+    state: 1,
   });
 
   // When customerData is available, update formData
   useEffect(() => {
-    console.log("vehicle", userRole);
     if (type === "view" && data) {
       setFormData({ ...data });
     }
-  }, [data, type, userRole]); // Re-run when `customerData` changes
+  }, [data, type, userRole]);
 
   const sriLankanProvinces = [
     "Central Province",
@@ -55,8 +57,26 @@ export default function CustomerCreateAndView({
     }));
   };
 
+  // 🔒 Validate DOB
+  const isDobValid = () => {
+    if (formData.dob) {
+      const selectedDate = new Date(formData.dob);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate >= today) {
+        toast.error("Date of Birth must be before today!");
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // validate DOB
+    if (!isDobValid()) return;
 
     try {
       const response = await customer_create(formData);
@@ -72,22 +92,21 @@ export default function CustomerCreateAndView({
           );
         }
       } else {
-        toast.error(response.data.message || "Something went wrong!");
+        toast.error( "Something went wrong!");
       }
     } catch (error) {
-      if (error.response && error.response.status === 422) {
-        const errors = error.response.data;
-        Object.keys(errors).forEach((key) => {
-          toast.error(errors[key][0]);
-        });
-      } else {
+       
         toast.error(error.response?.data?.message || "Something went wrong!");
-      }
+      
     }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    // validate DOB
+    if (!isDobValid()) return;
+
     if (status === "update") {
       const requestUpdateData = {
         ...formData,
@@ -101,29 +120,23 @@ export default function CustomerCreateAndView({
           );
           navigate(0);
         } else {
-          toast.error(response.data.message || "Something went wrong!");
+          toast.error( "Something went wrong!");
         }
       } catch (error) {
-        if (error.response && error.response.status === 422) {
-          const errors = error.response.data;
-          Object.keys(errors).forEach((key) => {
-            toast.error(errors[key][0]);
-          });
-        } else {
-          toast.error(error.response?.data?.message || "Something went wrong!");
-        }
+        
+          toast.error("Something went wrong!");
+        
       }
     } else {
       try {
-        if (type === 'view' && status !== "update") {
+        if (type === "view" && status !== "update") {
           const requestData = {
             vehicle_number: vehicle_number,
             customer_id: data?.customer_id,
-            type: 'onlyUpdate'
+            type: "onlyUpdate",
           };
 
           const response = await update_new_customer(requestData);
-          // console.log("Updatedvehicle", response.data.updatedVehicle);
 
           if (response.status === 200) {
             toast.success(
@@ -134,16 +147,15 @@ export default function CustomerCreateAndView({
               { state: { vehicle: response.data.updatedVehicle } }
             );
           } else {
-            toast.error(response.data.message || "Something went wrong!");
+            toast.error( "Something went wrong!");
           }
         } else {
           const requestData = {
             ...formData,
             vehicle_number: vehicle_number,
-            type: 'create&update'
+            type: "create&update",
           };
           const response = await update_new_customer(requestData);
-          // console.log("Updatedvehicle", response);
 
           if (response.status === 200) {
             toast.success(
@@ -154,22 +166,17 @@ export default function CustomerCreateAndView({
               { state: { vehicle: response.data.updatedVehicle } }
             );
           } else {
-            toast.error(response.data.message || "Something went wrong!");
+            toast.error( "Something went wrong!");
           }
         }
-        
       } catch (error) {
-        if (error.response && error.response.status === 422) {
-          const errors = error.response.data;
-          Object.keys(errors).forEach((key) => {
-            toast.error(errors[key][0]);
-          });
-        } else {
-          toast.error(error.response?.data?.message || "Something went wrong!");
-        }
+       
+          toast.error( "Something went wrong!");
+        
       }
     }
   };
+
   const onCancelBtn = () => {
     navigate(-1);
   };
@@ -178,6 +185,7 @@ export default function CustomerCreateAndView({
     <form onSubmit={handleSubmit}>
       <div className="bg-background py-6 px-4 sm:px-10">
         <div className="mt-3 flex flex-col">
+          {/* --- Name Fields --- */}
           <div className="flex flex-col md:flex-row w-full justify-between mb-0 md:mb-5 ">
             <div className="h-[1.5rem] md:h-auto  flex flex-row items-center md:items-start justify-between md:flex-col w-[100%] md:w-[40%]">
               <label className="md:mb-2 text-mobile_body_label sm:text-tab_body_label lg:text-body_label text-label">
@@ -206,6 +214,8 @@ export default function CustomerCreateAndView({
               />
             </div>
           </div>
+
+          {/* --- Mobile + Email --- */}
           <div className=" flex flex-col md:flex-row w-full justify-between md:mb-5 ">
             <div className="h-[1.5rem] md:h-auto  flex flex-row md:flex-col items-center  md:items-start justify-between w-[100%] md:w-[40%] mt-3 md:mt-0">
               <label className="md:mb-2 text-mobile_body_label sm:text-tab_body_label lg:text-body_label text-label">
@@ -234,6 +244,8 @@ export default function CustomerCreateAndView({
               />
             </div>
           </div>
+
+          {/* --- DOB --- */}
           <div className="flex flex-row w-full justify-start md:mb-5 ">
             <div className="flex flex-row md:flex-col justify-between w-[100%] md:w-[40%] mt-3 md:mt-0">
               <label className="md:mb-2 text-mobile_body_label sm:text-tab_body_label lg:text-body_label text-label">
@@ -245,10 +257,13 @@ export default function CustomerCreateAndView({
                 value={formData.dob}
                 onChange={handleChange}
                 disabled={type === "view" && status !== "update"}
+                max={new Date().toISOString().split("T")[0]} // prevent future dates
                 className="h-[1.5rem] md:h-[2.5rem] w-[60%] md:w-[100%] text-mobile_body_label sm:text-tab_body_label lg:text-body_label outline outline-1 outline-[#616161] px-6 rounded-md"
               />
             </div>
           </div>
+
+          {/* --- Address --- */}
           <div className="flex flex-col w-full justify-between mt-3 md:mt-0 mb-2">
             <label className="mb-2 text-mobile_body_label sm:text-tab_body_label lg:text-body_label text-label">
               <strong>Address</strong>
@@ -290,9 +305,6 @@ export default function CustomerCreateAndView({
                 disabled={type === "view" && status !== "update"}
                 className="h-[1.5rem] md:h-[2.5rem] text-mobile_body_label sm:text-tab_body_label lg:text-body_label outline outline-1 outline-[#616161] px-6 rounded-md w-[100%] md:w-[40%] mb-3"
               >
-                <option value="" disabled>
-                  Select Province
-                </option>
                 {sriLankanProvinces.map((province, index) => (
                   <option key={index} value={province}>
                     {province}
@@ -303,7 +315,7 @@ export default function CustomerCreateAndView({
           </div>
         </div>
       </div>
-      {type !== "view" && button !=='update' && (
+      {type !== "view" && button !== "update" && (
         <div className="w-full flex flex-col sm:flex-row sm:justify-end mt-2 md:mt-5">
           <button
             className="mobile_cancel-btn  md:tab_cancel-btn lg:cancel-btn mr-3 w-full sm:w-auto mb-2 sm:mb-0"
