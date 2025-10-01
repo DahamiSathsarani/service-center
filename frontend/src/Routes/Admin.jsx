@@ -20,6 +20,7 @@ import VehicleUpdatePage from "../Pages/admin/VehicleUpdatePage";
 import ServiceRecordViewPage from "../Pages/admin/ServiceRecordsViewPage";
 import FullForm from "../Pages/advisor/FullForm";
 import ServiceInventory from "../Pages/admin/ServiceInventoryPage";
+import LogsViewPage from "../Pages/admin/LogsViewPage";
 
 export default function Admin() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -93,6 +94,15 @@ export default function Admin() {
               element={
                 <ProtectedRoutes userRole={userRole} checkedRole={1}>
                   <CustomersViewPage />
+                </ProtectedRoutes>
+              }
+            />
+
+            <Route
+              path="logs"
+              element={
+                <ProtectedRoutes userRole={userRole} checkedRole={1}>
+                  <LogsViewPage />
                 </ProtectedRoutes>
               }
             />
