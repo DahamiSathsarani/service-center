@@ -4,6 +4,7 @@ use App\Http\Controllers\BayController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\JobTypesController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\PackagePriceController;
 use App\Http\Controllers\ServiceInventoryController;
 use App\Http\Controllers\ServiceRecordController;
@@ -134,4 +135,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('serviceinventories/{service_inventory_id}', [ServiceInventoryController::class, 'show']);
     Route::put('serviceinventories/{service_inventory_id}', [ServiceInventoryController::class, 'update']);
     Route::delete('serviceinventories/{service_inventory_id}', [ServiceInventoryController::class, 'destroy']);
+});
+
+/* Logs routes */
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('logs/getall', [LogController::class, 'get_all_logs']);
+    Route::delete('logs/delete/{logId}', [LogController::class, 'delete_log']);
 });

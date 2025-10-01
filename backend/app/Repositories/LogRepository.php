@@ -26,4 +26,20 @@ protected $logs;
             'user_updated' => Auth::id() ?? null,
         ]);
     }
+
+    public function get_all()
+    {
+        return $this->logs->get();
+    }
+
+    public function find($id)
+    {
+        return Log::where('log_id', $id)->first();
+    }
+
+    public function delete($id)
+    {
+        return Log::where('log_id', $id)->delete();
+    }
+
 }

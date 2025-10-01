@@ -9,6 +9,7 @@ import {
   FaCarAlt,
   FaFileAlt,
   FaTasks,
+  FaHistory
 } from "react-icons/fa";
 import { images } from "../../assets/Images/images";
 
@@ -43,6 +44,7 @@ export default function Sidebar({ userType, toggleSidebar }) {
     { path: "/advisor/service-records", label: "Service Records", icon: <FaFileAlt />,condition: userType === "advisor" },
     { path: "/admin/service-records", label: "Service Records", icon: <FaFileAlt />,condition: userType === "admin" },
     { path: "/admin/service-inventory", label: "Service Inventory", icon: <FaTasks />, condition: userType === "admin" },
+    { path: "/admin/logs", label: "Log History", icon: <FaHistory />, condition: userType === "admin" },
   ];
 
   return (
