@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Repositories\LogRepository;
 use Carbon\Carbon;
 use App\Repositories\DamageRepository;
+use App\Repositories\InspectionRepository;
+use App\Repositories\ServiceInventoryRepository;
 
 class ServiceRecordController extends Controller
 {
@@ -23,8 +25,10 @@ class ServiceRecordController extends Controller
     protected $packagepricerepo;
     protected $logrepo;
     protected $damageImagesrepo;
+    protected $inspectionrepo;
+    protected $serviceinventoryrepo;
 
-    public function __construct(ServiceRecordRepository $servicerecordrepo, VehicleRepository $vehiclerepo, PackagePriceRepository $packagepricerepo, LogRepository $logrepo, ServiceRecordsPackageRepository $serviceRecordPackagerepo, DamageRepository $damageImagesrepo)
+    public function __construct(ServiceRecordRepository $servicerecordrepo, VehicleRepository $vehiclerepo, PackagePriceRepository $packagepricerepo, LogRepository $logrepo, ServiceRecordsPackageRepository $serviceRecordPackagerepo, DamageRepository $damageImagesrepo, InspectionRepository $inspectionrepo, ServiceInventoryRepository $serviceinventoryrepo)
     {
         $this->servicerecordrepo = $servicerecordrepo;
         $this->vehiclerepo = $vehiclerepo;
@@ -32,6 +36,8 @@ class ServiceRecordController extends Controller
         $this->logrepo = $logrepo;
         $this->serviceRecordPackagerepo = $serviceRecordPackagerepo;
         $this->damageImagesrepo = $damageImagesrepo;
+        $this->inspectionrepo = $inspectionrepo;
+        $this->serviceinventoryrepo = $serviceinventoryrepo;
     }
 
     public function update_damages(Request $request)
@@ -127,6 +133,20 @@ class ServiceRecordController extends Controller
                 $dataRecord = ['status' => 'ONGOING', 'service_no' => $record_id, 'price' => $request->price];
                 $data = ['status' => 'ONGOING', 'service_no' => $record_id];
                 $status = 'ONGOING';
+
+                $inspections = $this->inspectionrepo->search(['service_no' => $record_id]);
+
+                foreach ($inspections as $inspection) {
+                    $inventory = $this->serviceinventoryrepo->findById($inspection->service_inventory_id);
+
+                    if ($inventory) {
+                        $oldQty = $inventory->quantity;
+                        $newQty = max(0, $oldQty - $inspection->quantity);
+
+                        $inventory->update(['quantity' => $newQty]);
+                    }
+                }
+
             } elseif ($request->type === '2') {
                 $dataRecord = ['status' => 'COMPLETED', 'service_no' => $record_id, 'price' => $request->price];
                 $data = ['status' => 'COMPLETED', 'service_no' => $record_id];
