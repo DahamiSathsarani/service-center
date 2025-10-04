@@ -48,10 +48,12 @@ class VehicleInventoryController extends Controller {
     public function inventoryUpdate(Request $request){
         try {
             $request->validate([
-                'items' => 'required|array',
+                'items' => 'array',
                 'service_no' => 'required|numeric',
             ]);
-
+             if($request->items == null){
+                return response()->json(['message' => 'No items to update'], 200);
+             }
             $inventory = $this->inventoryRepo->inventoryUpdate(request: $request);
 
 
