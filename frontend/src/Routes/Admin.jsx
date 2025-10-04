@@ -21,6 +21,7 @@ import ServiceRecordViewPage from "../Pages/admin/ServiceRecordsViewPage";
 import FullForm from "../Pages/advisor/FullForm";
 import ServiceInventory from "../Pages/admin/ServiceInventoryPage";
 import LogsViewPage from "../Pages/admin/LogsViewPage";
+import LiveRecordsPage from "../Pages/admin/LiveRecordsPage";
 
 export default function Admin() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -103,6 +104,15 @@ export default function Admin() {
               element={
                 <ProtectedRoutes userRole={userRole} checkedRole={1}>
                   <LogsViewPage />
+                </ProtectedRoutes>
+              }
+            />
+
+            <Route
+              path="live-records"
+              element={
+                <ProtectedRoutes userRole={userRole} checkedRole={1}>
+                  <LiveRecordsPage />
                 </ProtectedRoutes>
               }
             />
