@@ -23,6 +23,7 @@ class InspectionController extends Controller
     {
         $items = $request->inspections;
         $other_items = $request->others;
+        $type = $request->input('type');
         try {
             if ($items) {
                 foreach ($items as $item) {
@@ -43,6 +44,18 @@ class InspectionController extends Controller
                             $data = ["quantity" =>  $item['quantity'], "remark" => $item['rmk'], "service_no" => $request->record_id, "service_inventory_id" => $record->service_inventory_id];
                             $this->inspectionrepo->create($data);
                             $this->logrepo->create('Create', 'Inspection', "({$item['quantity']}) number of Service Inventory({$record->service_inventory_id}) are added({$item['rmk']}) to Service No: ({$request->record_id})");
+
+                            if ($type === 'bay_inspection') {
+                                $newQty = max(0, $record->quantity - $item['quantity']);
+                                $record->quantity = $newQty;
+                                $record->save();
+
+                                $this->logrepo->create(
+                                    'Update',
+                                    'ServiceInventory',
+                                    "Reduced ({$item['quantity']}) from inventory ID: {$record->service_inventory_id}. New quantity: {$newQty}"
+                                );
+                            }
                         }
                     }
                 }

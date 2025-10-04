@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import InspectionsTable from "../../Components/Tables/InspectionsTable";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function Inspection({ data }) {
+export default function Inspection({ data, type }) {
   const [service_inventries, setServiceInventries] = useState([]);
   const [serviceInventryData, setServiceInventryData] = useState([]);
   const [inventory_type, setInventoryType] = useState("oil_fluid"); // Default type
@@ -151,6 +151,7 @@ export default function Inspection({ data }) {
         inspections: updatedInspection,
         others: formattedOtherInspections,
         record_id: record_id,
+        type: type,
       });
 
       if (response.status === 200) {

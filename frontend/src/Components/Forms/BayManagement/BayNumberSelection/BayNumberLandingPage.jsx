@@ -140,7 +140,7 @@ export default function BayNumberLandingPage({
             >
               <FaTimes />
             </button>
-            <Inspection />
+            <Inspection type="bay_inspection"/>
           </div>
         </div>
       )}
