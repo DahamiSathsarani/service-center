@@ -11,6 +11,7 @@ import {
   FaTasks,
   FaHistory
 } from "react-icons/fa";
+import { MdLiveTv } from "react-icons/md";
 import { images } from "../../assets/Images/images";
 
 export default function Sidebar({ userType, toggleSidebar }) {
@@ -45,6 +46,7 @@ export default function Sidebar({ userType, toggleSidebar }) {
     { path: "/admin/service-records", label: "Service Records", icon: <FaFileAlt />,condition: userType === "admin" },
     { path: "/admin/service-inventory", label: "Service Inventory", icon: <FaTasks />, condition: userType === "admin" },
     { path: "/admin/logs", label: "Log History", icon: <FaHistory />, condition: userType === "admin" },
+    { path: "/admin/live-records", label: "Live Display", icon: <MdLiveTv />, condition: userType === "admin" },
   ];
 
   return (
