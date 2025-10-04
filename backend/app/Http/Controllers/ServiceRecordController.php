@@ -167,20 +167,28 @@ class ServiceRecordController extends Controller
     {
         try {
             $user = Auth::user();
+            $type = $request->input('type'); 
 
             if ($user->role_id === 1) {
                 $service_records = $this->servicerecordrepo->get('', 'completed_admin');
-                return response()->json(["message" => "get completed records successfully", 'data' => $service_records], 200);
-            } else if ($user->role_id === 2) {
+            } 
+            else if ($user->role_id === 2) {
                 $data = ['user_id' => $user->user_id, 'status' => 'COMPLETED'];
                 $service_records = $this->servicerecordrepo->get($data, 'completed');
+
+                if ($type === 'today') {
                     $today = Carbon::today()->toDateString();
-                    $filteredRecords = collect($service_records)->filter(function ($record) use ($today) {
+                    $service_records = collect($service_records)->filter(function ($record) use ($today) {
                         return Carbon::parse($record->date)->toDateString() === $today;
                     })->values();
-                    return response()->json(["message" => "get today completed records successfully", 'data' => $filteredRecords, 'user' => $user], 200);
-
+                }
             }
+
+            return response()->json([
+                "message" => "Completed records retrieved successfully",
+                "data" => $service_records,
+                "user" => $user
+            ], 200);
 
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);
