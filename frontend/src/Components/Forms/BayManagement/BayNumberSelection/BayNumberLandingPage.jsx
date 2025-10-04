@@ -9,6 +9,7 @@ export default function BayNumberLandingPage({
   data,
   onClickInBtn,
   onClickOutBtn,
+  status,
 }) {
   const [selectedBay, setSelectedBay] = useState(null);
   const [isInspectionOpen, setInspectionOpen] = useState(false); // State to manage modal visibility
@@ -68,7 +69,7 @@ export default function BayNumberLandingPage({
             : "sm:justify-between"
         } w-full flex flex-col sm:flex-row items-center my-2 md:my-4 px-4 md:pr-4`}
       >
-        {/* {data.serviceTimeRecord !== null && (
+        {data.serviceTimeRecord !== null && status==='lube' && (
           <button
             disabled={serviceRecordType !== "Full Service"}
             className={`${
@@ -81,7 +82,7 @@ export default function BayNumberLandingPage({
           >
             Inspection
           </button>
-        )} */}
+        )}
         {data.serviceTimeRecord !== null && (
           <div className="py-3 flex flex-col w-[20rem]">
             <span className="flex w-full justify-center py-2 text-center bg-[#fff6c1] font-body text-body_label border border-primary items-center">
