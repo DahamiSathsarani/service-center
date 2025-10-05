@@ -5,7 +5,7 @@ import SignaturePad from "../Canvas/SignaturePad";
 import { getHandoverDetails } from "../../Api/VehicleHandoverAPI";
 import { useParams } from "react-router-dom";
 
-export default function VehicleHandoverTable({ finalInspection, action }) {
+export default function VehicleHandoverTable({ finalInspection, action, jobType }) {
   const [supervisors, setSupervisors] = useState([]);
   const [selectedWheelsInspector, setSelectedWheelsInspector] = useState("");
   const [selectedFinalChecker, setSelectedFinalChecker] = useState("");
@@ -96,7 +96,7 @@ export default function VehicleHandoverTable({ finalInspection, action }) {
                 <select
                   className="h-10 px-3 border rounded"
                   value={selectedWheelsInspector}
-                  disabled={selectedWheelsInspector || action === "view"}
+                  disabled={ action === "view"}
                   onChange={(e) => setSelectedWheelsInspector(e.target.value)}
                 >
                   <option value="" disabled>
@@ -150,7 +150,7 @@ export default function VehicleHandoverTable({ finalInspection, action }) {
               </td>
               <td className="border border-black px-3 py-2 text-center">
                 <select
-                  disabled={selectedFinalChecker || action === "view"}
+                  disabled={ action === "view"}
                   className="h-10 px-3 border rounded"
                   value={selectedFinalChecker}
                   onChange={(e) => setSelectedFinalChecker(e.target.value)}
@@ -180,11 +180,13 @@ export default function VehicleHandoverTable({ finalInspection, action }) {
                 ) : (
                   <button
                     className={`mobile_cancel-btn sm:tab_cancel-btn lg:cancel-btn  ${
-                      !selectedWheelsInspector
+                      (!selectedFinalChecker ||
+                        (!selectedWheelsInspectorSign && jobType == "Full Service"))
                         ? "opacity-50 cursor-not-allowed"
                         : ""
                     }`}
-                    disabled={!selectedFinalChecker}
+                    disabled={!selectedFinalChecker ||
+                              (!selectedWheelsInspectorSign && jobType == "Full Service")}
                     onClick={() => {
                       setAdvisorSign(true);
                       setSignatureType("final_finishing");
