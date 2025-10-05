@@ -38,6 +38,8 @@ export default function FullForm({ type, action }) {
     console.log(data);
   };
 
+  const jobType = recordDetails?.service_records_package?.[0]?.package?.job_type?.job_type;
+
   const onContinueBTn = async () => {
     try {
       const response = await update_record_details(
@@ -176,6 +178,7 @@ export default function FullForm({ type, action }) {
           </h1>
           <VehicleHandoverTable
             vehicleHandoverData={recordDetails.vehicle_handovers}
+            jobType={jobType}
             record_id={record_id}
             action={action}
             finalInspection={setFinalInspectionFunction}
