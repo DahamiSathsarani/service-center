@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { customer_search } from "../../Api/CustomerAPI";
+import { sendOtp } from "../../Api/CustomerAPI";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function CustomerSearchPage() {
+export default function MobileNumberPage() {
   const location = useLocation();
   const type = location.state?.type;
   const vehicle_number = location.state?.vehicle_number;
@@ -18,35 +18,23 @@ export default function CustomerSearchPage() {
   const onClickEnterBtn = async(e) => {
     e.preventDefault()
     try{
-        const response = await customer_search({'phone_number':phone_number});
-          console.log("hi",response.data);
-          if (response.status === 200) {
-            if (type === 'view') {
-              navigate(`/advisor/customer/${response.data.id}/view`)
-            } else if (type === 'update') {
-              navigate(`/advisor/customer/${vehicle_number}/update/${response.data.id}`)
-            }
+        const response = await sendOtp({'mobile_number':phone_number});
+            console.log("hi",response);
+            if (response.status === 200) {
+                toast.success("OTP sent successfully");
+                navigate(`/advisor/customer/otp-verification`, { state: { mobile_number: phone_number } });
+            
              
     }}catch(error){
-       console.log("Error:", error);
-          if (error.response?.status === 404) {
-              toast.error(error.response?.data?.message || "Customer not found!");
-              console.log("type",type)
-              if (type === 'view') {
-                navigate(`/advisor/customer/mobile-number`)
-              } else if (type === 'update') {
-                navigate(`/advisor/customer/${vehicle_number}/create`)
-              }
-          } else {
-              toast.error("An error occurred. Please try again.");
-          }
+        console.log("Error:", error);
+        toast.error("An error occurred. Please try again.");
     }
   };
 
   return (
     <div className="flex justify-center items-center h-[80vh] w-full bg-background">
       <div className="bg-[#ffff] rounded-lg shadow-lg w-[18rem] sm:w-[30rem] md:w-[40rem] lg:w-[50rem] px-[2rem] sm:px-[4rem] pt-[2rem] pb-[3rem] ">
-        <h1 className="text-heading text-center mb-[2rem]">Search Customer</h1>
+        <h1 className="text-heading text-center mb-[2rem]">Enter Customer Mobile Number</h1>
         <form className="md:flex justify-center " onSubmit={onClickEnterBtn}>
           <div className="w-full md:flex md:h-[3rem] md:w-[28rem] lg:w-[38rem] items-center justify-between">
             <input
@@ -62,7 +50,7 @@ export default function CustomerSearchPage() {
               type="submit"
               className="w-full  md:mt-0 md:w-[8rem] mobile_submit-btn sm:tab_submit-btn lg:submit-btn"
             >
-              Search
+              Enter
             </button>
           </div>
         </form>
