@@ -42,6 +42,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('customer/update', [CustomerController::class, 'update_customer_details']);
     Route::post('customer/send-otp', [CustomerController::class, 'sendOtp']);
     Route::post('customer/verify-otp', [CustomerController::class, 'verifyOtp']);
+    Route::put('/customer/update-mobile', [CustomerController::class, 'updateMobileNumber']);
 });
 
 /* Vehicle routes */

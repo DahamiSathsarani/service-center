@@ -210,4 +210,53 @@ class CustomerController extends Controller
         }
     }
 
+    public function updateMobileNumber(Request $request)
+    {
+        try {
+            $messages = [
+                'mobile_number.unique' => 'This mobile number is already registered with another customer.',
+            ];
+
+            $request->validate([
+                'customer_id' => 'required|exists:customers,customer_id',
+                'mobile_number' => [
+                    'required',
+                    'string',
+                    'min:10',
+                    'max:15',
+                    Rule::unique('customers', 'mobile_number')->ignore($request->customer_id, 'customer_id'),
+                ],
+            ], $messages);
+
+            $customer = $this->customerrepo->search($request->customer_id, 'id');
+
+            if (!$customer) {
+                return response()->json(['message' => 'Customer not found'], 404);
+            }
+
+            $this->customerrepo->update(
+                ['customer_id' => $request->customer_id],
+                ['mobile_number' => $request->mobile_number]
+            );
+
+            $updatedCustomer = $this->customerrepo->search($request->customer_id, 'id');
+
+            $this->logrepo->create(
+                'Update',
+                'Customer',
+                "Mobile number updated for customer ({$updatedCustomer->customer_id})"
+            );
+
+            return response()->json([
+                'message' => 'Mobile number updated successfully',
+                'customer' => $updatedCustomer
+            ], 200);
+
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
 }
