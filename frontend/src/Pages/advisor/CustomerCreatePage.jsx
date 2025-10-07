@@ -6,6 +6,7 @@ import NormalBackground from "../../Components/Menu Compnents/NormalBackground";
 export default function CustomerCreatePage({userRole}) {
   const location = useLocation();
   const type = location.state?.type;
+  const mobile_number = location.state?.mobile_number;
 
   return (
     <NormalBackground
@@ -13,6 +14,7 @@ export default function CustomerCreatePage({userRole}) {
       componentName={CustomerCreateAndView}
       userRole={userRole}
       type={type}
+      data={{ mobile_number }}
     />
   );
 }

@@ -7,19 +7,25 @@ use Illuminate\Http\Request;
 use App\Repositories\CustomerRepository;
 use App\Repositories\LogRepository;
 use App\Repositories\VehicleRepository;
+use App\Repositories\OtpRepository;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
+use App\Helpers\SmsHelper;
 
 class CustomerController extends Controller
 {
     protected $customerrepo;
     protected $logrepo;
     protected $vehiclerepo;
-    public function __construct(CustomerRepository $customerrepo, LogRepository $logrepo, VehicleRepository $vehiclerepo)
+    protected $otprepo;
+
+    public function __construct(CustomerRepository $customerrepo, LogRepository $logrepo, VehicleRepository $vehiclerepo, OtpRepository $otprepo)
     {
         $this->customerrepo = $customerrepo;
         $this->logrepo = $logrepo;
         $this->vehiclerepo = $vehiclerepo;
+         $this->otprepo = $otprepo;
     }
 
     public function customerCreation(Request $request)
@@ -151,4 +157,57 @@ class CustomerController extends Controller
             }
         }
     }
+
+    public function sendOtp(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'mobile_number' => 'required|string|min:11|max:15',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $otp = rand(100000, 999999);
+
+        $this->otprepo->deleteOtps($request->mobile_number);
+
+        $this->otprepo->saveOtp($request->mobile_number, $otp);
+
+        $message = "Your verification code is: $otp. It will expire in 2 minutes.";
+        $response = SmsHelper::sendSms($request->mobile_number, $message);
+
+        return response()->json([
+            'message' => 'OTP sent successfully',
+            'response' => $response
+        ], 200);
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'mobile_number' => 'required|string|min:10|max:15',
+            'otp' => 'required|string|size:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $status = $this->otprepo->verifyOtp($request->mobile_number, $request->otp);
+
+        switch ($status) {
+            case 'valid':
+                return response()->json(['message' => 'OTP verified successfully'], 200);
+            case 'expired':
+                return response()->json(['message' => 'OTP has expired. Please request a new one.'], 400);
+            case 'invalid':
+                return response()->json(['message' => 'Invalid OTP. Please try again.'], 400);
+            case 'not_found':
+                return response()->json(['message' => 'No OTP found for this number.'], 404);
+            default:
+                return response()->json(['message' => 'OTP verification failed.'], 500);
+        }
+    }
+
 }

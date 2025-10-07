@@ -20,7 +20,7 @@ export default function CustomerCreateAndView({
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
-    mobile_number: "",
+    mobile_number: data?.mobile_number,
     email: "",
     dob: "",
     house_number: "",
@@ -31,6 +31,7 @@ export default function CustomerCreateAndView({
 
   // When customerData is available, update formData
   useEffect(() => {
+    console.log("mobile", data?.mobile_number)
     if (type === "view" && data) {
       setFormData({ ...data });
     }
@@ -102,6 +103,7 @@ export default function CustomerCreateAndView({
   };
 
   const handleUpdate = async (e) => {
+    console.log("status", status);
     e.preventDefault();
 
     // validate DOB
@@ -217,19 +219,22 @@ export default function CustomerCreateAndView({
 
           {/* --- Mobile + Email --- */}
           <div className=" flex flex-col md:flex-row w-full justify-between md:mb-5 ">
-            <div className="h-[1.5rem] md:h-auto  flex flex-row md:flex-col items-center  md:items-start justify-between w-[100%] md:w-[40%] mt-3 md:mt-0">
-              <label className="md:mb-2 text-mobile_body_label sm:text-tab_body_label lg:text-body_label text-label">
-                <strong>Mobile No</strong>
-              </label>
-              <input
-                type="text"
-                name="mobile_number"
-                value={formData.mobile_number}
-                onChange={handleChange}
-                disabled={type === "view" && status !== "update"}
-                className="h-[1.5rem] md:h-[2.5rem] w-[60%] md:w-[100%] text-mobile_body_label sm:text-tab_body_label lg:text-body_label outline outline-1 outline-[#616161] px-6 rounded-md"
-              />
-            </div>
+            {type === "view" && status !== "update" && (
+              <div className="h-[1.5rem] md:h-auto  flex flex-row md:flex-col items-center  md:items-start justify-between w-[100%] md:w-[40%] mt-3 md:mt-0">
+                <label className="md:mb-2 text-mobile_body_label sm:text-tab_body_label lg:text-body_label text-label">
+                  <strong>Mobile No</strong>
+                </label>
+                <input
+                  type="text"
+                  name="mobile_number"
+                  value={formData.mobile_number}
+                  onChange={handleChange}
+                  disabled={type === "view" && status !== "update"}
+                  className="h-[1.5rem] md:h-[2.5rem] w-[60%] md:w-[100%] text-mobile_body_label sm:text-tab_body_label lg:text-body_label outline outline-1 outline-[#616161] px-6 rounded-md"
+                  placeholder="947xxxxxxxx"
+                />
+              </div>
+            )}
             <div className="h-[1.5rem] md:h-auto items-center  md:items-start justify-between flex flex-row md:flex-col w-[100%] md:w-[40%] mt-3 md:mt-0 ">
               <label className="md:mb-2 text-mobile_body_label sm:text-tab_body_label lg:text-body_label text-label">
                 <strong>Email</strong>

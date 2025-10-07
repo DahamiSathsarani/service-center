@@ -40,6 +40,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('customer/view', [CustomerController::class, 'customerView']);
     Route::get('customers/all/view', [CustomerController::class, 'get_all_customers_details']);
     Route::post('customer/update', [CustomerController::class, 'update_customer_details']);
+    Route::post('customer/send-otp', [CustomerController::class, 'sendOtp']);
+    Route::post('customer/verify-otp', [CustomerController::class, 'verifyOtp']);
 });
 
 /* Vehicle routes */
