@@ -4,9 +4,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function MobileNumberPage() {
+export default function MobileNumberPage({userRole}) {
   const location = useLocation();
-  const type = location.state?.type;
+  // const type = location.state?.type;
   const vehicle_number = location.state?.vehicle_number;
   const navigate = useNavigate();
   const [phone_number, setPhoneNumber] = useState("");
@@ -21,9 +21,12 @@ export default function MobileNumberPage() {
         const response = await sendOtp({'mobile_number':phone_number});
             console.log("hi",response);
             if (response.status === 200) {
-                toast.success("OTP sent successfully");
-                navigate(`/advisor/customer/otp-verification`, { state: { mobile_number: phone_number } });
-            
+              toast.success("OTP sent successfully");
+              if(userRole == 1) {
+                navigate(`/admin/customer/otp-verification`, { state: { mobile_number: phone_number, user_role: userRole } });
+              } else {
+                navigate(`/advisor/customer/otp-verification`, { state: { mobile_number: phone_number, vehicle_number: vehicle_number} });
+              }
              
     }}catch(error){
         console.log("Error:", error);

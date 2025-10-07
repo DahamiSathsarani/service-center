@@ -103,6 +103,7 @@ export default function CustomerCreateAndView({
   };
 
   const handleUpdate = async (e) => {
+    console.log("status", status);
     e.preventDefault();
 
     // validate DOB

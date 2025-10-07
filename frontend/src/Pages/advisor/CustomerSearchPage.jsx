@@ -35,7 +35,7 @@ export default function CustomerSearchPage() {
               if (type === 'view') {
                 navigate(`/advisor/customer/mobile-number`)
               } else if (type === 'update') {
-                navigate(`/advisor/customer/${vehicle_number}/create`)
+                navigate(`/advisor/customer/mobile-number`, { state: { vehicle_number: vehicle_number }})
               }
           } else {
               toast.error("An error occurred. Please try again.");

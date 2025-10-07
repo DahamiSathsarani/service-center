@@ -15,7 +15,7 @@ export default function CustomerTable({ data }) {
   ]);
 
   const handleCreateNewCustomer = () => {
-    navigate(`/admin/customer/create`);
+    navigate(`/admin/customer/mobile-number`);
   };
 
   const handleEditCustomer = (customer_id) => {

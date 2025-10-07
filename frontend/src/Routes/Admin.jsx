@@ -22,6 +22,8 @@ import FullForm from "../Pages/advisor/FullForm";
 import ServiceInventory from "../Pages/admin/ServiceInventoryPage";
 import LogsViewPage from "../Pages/admin/LogsViewPage";
 import LiveRecordsPage from "../Pages/admin/LiveRecordsPage";
+import MobileNumberPage from "../Pages/advisor/MobileNumberPage";
+import OtpVerificationPage from "../Pages/advisor/OtpVerificationPage";
 
 export default function Admin() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -130,6 +132,22 @@ export default function Admin() {
               element={
                 <ProtectedRoutes userRole={userRole} checkedRole={1}>
                   <CustomerCreatePage userRole="1" />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="customer/mobile-number"
+              element={
+                <ProtectedRoutes userRole={userRole} checkedRole={1}>
+                  <MobileNumberPage userRole="1" />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="customer/otp-verification"
+              element={
+                <ProtectedRoutes userRole={userRole} checkedRole={1}>
+                  <OtpVerificationPage userRole="1" />
                 </ProtectedRoutes>
               }
             />

@@ -8,6 +8,8 @@ export default function OtpVerificationPage() {
   const location = useLocation();
   const type = location.state?.type;
   const mobile_number = location.state?.mobile_number;
+  const vehicle_number = location.state?.vehicle_number;
+  const user_role = location.state?.user_role;
   const navigate = useNavigate();
 
   const OTP_LENGTH = 6;
@@ -60,7 +62,15 @@ export default function OtpVerificationPage() {
       if (type === "update") {
         navigate(`/advisor/customer/${response.data.id}/update`);
       } else {
-        navigate(`/advisor/customer/create`, { state: { mobile_number: mobile_number } });
+        if(user_role == 1) {
+          navigate(`/admin/customer/create`, { state: { mobile_number: mobile_number } });
+        } else {
+          if(vehicle_number) {
+            navigate(`/advisor/customer/${vehicle_number}/create`, { state: { mobile_number: mobile_number } })
+          } else {
+            navigate(`/advisor/customer/create`, { state: { mobile_number: mobile_number } });
+          }
+        }
       }
     } catch (error) {
       const message =
