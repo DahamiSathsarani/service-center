@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { sendOtp, verifyOtp } from "../../Api/CustomerAPI";
+import { sendOtp, updateMobileNumber, verifyOtp } from "../../Api/CustomerAPI";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,6 +10,7 @@ export default function OtpVerificationPage() {
   const mobile_number = location.state?.mobile_number;
   const vehicle_number = location.state?.vehicle_number;
   const user_role = location.state?.user_role;
+  const customer_id = location.state?.customer_id;
   const navigate = useNavigate();
 
   const OTP_LENGTH = 6;
@@ -58,20 +59,42 @@ export default function OtpVerificationPage() {
 
     try {
       const response = await verifyOtp(mobile_number, otpString);
-      toast.success("OTP verified successfully!");
-      if (type === "update") {
-        navigate(`/advisor/customer/${response.data.id}/update`);
-      } else {
-        if(user_role == 1) {
-          navigate(`/admin/customer/create`, { state: { mobile_number: mobile_number } });
+
+      if(response.status == 200) {
+        toast.success("OTP verified successfully!");
+
+        if (type === "update") {
+          navigate(`/advisor/customer/${response.data.id}/update`);
         } else {
-          if(vehicle_number) {
-            navigate(`/advisor/customer/${vehicle_number}/create`, { state: { mobile_number: mobile_number } })
+          if(user_role == 1) {
+            if (customer_id) {
+              try {
+                console.log("customer id", customer_id)
+                const response = await updateMobileNumber(customer_id, mobile_number);
+                toast.success(response.data.message);
+                navigate(`/admin/customer/${customer_id}/update`);
+              } catch(error) {
+                if (error.response?.status === 422 && error.response.data.errors) {
+                  const firstErrorKey = Object.keys(error.response.data.errors)[0];
+                  const firstErrorMsg = error.response.data.errors[firstErrorKey][0];
+                  toast.error(firstErrorMsg);
+                } else {
+                  toast.error(error.response?.data?.message || "Something went wrong!");
+                }
+              }
+            } else {
+              navigate(`/admin/customer/create`, { state: { mobile_number: mobile_number } });
+            }
           } else {
-            navigate(`/advisor/customer/create`, { state: { mobile_number: mobile_number } });
+            if(vehicle_number) {
+              navigate(`/advisor/customer/${vehicle_number}/create`, { state: { mobile_number: mobile_number } })
+            } else {
+              navigate(`/advisor/customer/create`, { state: { mobile_number: mobile_number } });
+            }
           }
         }
       }
+      
     } catch (error) {
       const message =
         error.response?.data?.message || "OTP verification failed!";

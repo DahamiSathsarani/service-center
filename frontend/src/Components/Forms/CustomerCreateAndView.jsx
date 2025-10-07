@@ -179,6 +179,11 @@ export default function CustomerCreateAndView({
     }
   };
 
+  const handleMobileUpdate = async (e) => {
+    console.log("customer id", data.customer_id);
+    navigate(`/admin/customer/mobile-number`, { state: { customer_id: data.customer_id } })
+  }
+
   const onCancelBtn = () => {
     navigate(-1);
   };
@@ -352,6 +357,32 @@ export default function CustomerCreateAndView({
           >
             Update New Customer
           </button>
+        </div>
+      )}
+
+      {type === "view" && status === "update" && button === "update" && (
+        <div className="bg-background py-4 px-4 sm:px-6 mt-6 rounded-md">
+          <h3 className="text-lg font-semibold mb-3">Mobile Number</h3>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            
+            <div className="flex gap-3">
+              <label className="text-body_label font-medium">Current Mobile Number:</label>
+              <input
+                value={formData.mobile_number}
+                disabled={type === "view" && status == "update"}
+                className="h-[1.5rem] md:h-[2.5rem] text-mobile_body_label sm:text-tab_body_label lg:text-body_label outline outline-1 outline-[#616161] px-6 rounded-md w-[100%] md:w-[40%] mb-3"
+              />
+            </div>
+
+            
+            <button
+              className="mobile_submit-btn md:tab_submit-btn lg:submit-btn w-full sm:w-auto"
+              type="button"
+              onClick={handleMobileUpdate}
+            >
+              Update Mobile Number
+            </button>
+          </div>
         </div>
       )}
     </form>

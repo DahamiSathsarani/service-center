@@ -62,3 +62,13 @@ export async function verifyOtp(mobile_number, otp) {
     throw error;
   }
 }
+
+export async function updateMobileNumber(customer_id, mobile_number) {
+  try {
+    return await axiosInstance.put("api/customer/update-mobile", { customer_id, mobile_number });
+  } catch (error) {
+    console.error("Update Mobile Number Error:", error.response?.data || error);
+    throw error;
+  }
+}
+

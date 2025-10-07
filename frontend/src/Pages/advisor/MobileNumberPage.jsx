@@ -8,6 +8,7 @@ export default function MobileNumberPage({userRole}) {
   const location = useLocation();
   // const type = location.state?.type;
   const vehicle_number = location.state?.vehicle_number;
+  const customer_id = location.state?.customer_id;
   const navigate = useNavigate();
   const [phone_number, setPhoneNumber] = useState("");
 
@@ -23,7 +24,7 @@ export default function MobileNumberPage({userRole}) {
             if (response.status === 200) {
               toast.success("OTP sent successfully");
               if(userRole == 1) {
-                navigate(`/admin/customer/otp-verification`, { state: { mobile_number: phone_number, user_role: userRole } });
+                navigate(`/admin/customer/otp-verification`, { state: { mobile_number: phone_number, user_role: userRole, customer_id: customer_id } });
               } else {
                 navigate(`/advisor/customer/otp-verification`, { state: { mobile_number: phone_number, vehicle_number: vehicle_number} });
               }
