@@ -26,7 +26,7 @@ export default function CustomerCreateAndView({
     house_number: "",
     street_name: "",
     city: "",
-    state: 1,
+    state: "Central Province",
   });
 
   // When customerData is available, update formData
