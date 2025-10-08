@@ -25,7 +25,7 @@ class CustomerController extends Controller
         $this->customerrepo = $customerrepo;
         $this->logrepo = $logrepo;
         $this->vehiclerepo = $vehiclerepo;
-         $this->otprepo = $otprepo;
+        $this->otprepo = $otprepo;
     }
 
     public function customerCreation(Request $request)
@@ -45,6 +45,10 @@ class CustomerController extends Controller
             ]);
             $customerData = array_merge($request->all(), ['status' => 'ACTIVE']);
             $customer = $this->customerrepo->create($customerData);
+            $today = now();
+            $customer_code = 'EAZYCARE' . $today->format('Ymd') . $customer->customer_id;
+            $customer->customer_code = $customer_code;
+            $customer->save();
             $this->logrepo->create('Create', 'Customer', "Customer created successfully ({$customer->mobile_number})");
             return response()->json([
                 'message' => 'Customer Created Successfully!',
@@ -251,12 +255,10 @@ class CustomerController extends Controller
                 'message' => 'Mobile number updated successfully',
                 'customer' => $updatedCustomer
             ], 200);
-
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
-
 }
