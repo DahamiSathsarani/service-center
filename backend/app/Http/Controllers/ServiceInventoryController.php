@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\ServiceInventoryRepository;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;

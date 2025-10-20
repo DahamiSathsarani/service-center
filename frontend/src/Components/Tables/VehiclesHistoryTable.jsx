@@ -34,22 +34,22 @@ export default function VehiclesHistoryTable({ data }) {
                   }
                 >
                   <td className="border px-3 py-2 text-center">
-                    {vehicle.vehicle_number}
+                    {vehicle?.vehicle_number}
                   </td>
                   <td className="border px-3 py-2 text-center">
-                    {vehicle.vehicle.type}
+                    {vehicle?.vehicle?.type}
                   </td>
                   <td className="border px-3 py-2 text-center">
-                    {vehicle.vehicle.brand}
+                    {vehicle?.vehicle?.brand}
                   </td>
                   <td className="border px-3 py-2 text-center">
-                    {vehicle.vehicle.model}
+                    {vehicle?.vehicle?.model}
                   </td>
                   <td className="border px-3 py-2 text-center">
-                    {vehicle.vehicle.fuel_type}
+                    {vehicle?.vehicle?.fuel_type}
                   </td>
                   <td className="border px-3 py-2 text-center">
-                    {vehicle.vehicle.engine_number}
+                    {vehicle?.vehicle?.engine_number}
                   </td>
                 </tr>
               ))

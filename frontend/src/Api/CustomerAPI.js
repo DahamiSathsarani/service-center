@@ -44,3 +44,31 @@ export async function update_customer(requestData) {
     throw error;
   }
 }
+
+export async function sendOtp(data) {
+  try {
+    return await axiosInstance.post("api/customer/send-otp", data);
+  } catch (error) {
+    console.error("Send OTP Error:", error.response?.data || error);
+    throw error;
+  }
+}
+
+export async function verifyOtp(mobile_number, otp) {
+  try {
+    return await axiosInstance.post("api/customer/verify-otp", { mobile_number, otp });
+  } catch (error) {
+    console.error("Verify OTP Error:", error.response?.data || error);
+    throw error;
+  }
+}
+
+export async function updateMobileNumber(customer_id, mobile_number) {
+  try {
+    return await axiosInstance.put("api/customer/update-mobile", { customer_id, mobile_number });
+  } catch (error) {
+    console.error("Update Mobile Number Error:", error.response?.data || error);
+    throw error;
+  }
+}
+

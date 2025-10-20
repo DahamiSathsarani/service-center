@@ -29,15 +29,15 @@ class VehicleInventoryController extends Controller {
             foreach ($inventory as $inventory_item) {
                 $this->logrepo->create('Create', 'Vehicle Inventory', "{$inventory_item->no_of_items_in} number of {$inventory_item->item}(s) are added in the {$inventory_item->service_no}th service before the service.");
             }
-    
+
             if ($inventory) {
                 return response()->json([
                     'inventory' => $inventory
                 ], 200);
             }else{
-                return response()->json(['message' => 'Inventory not found'], 404);
+                return response()->json(['message' => 'Inventory not found'], 200);
             }
-            
+
         } catch (ValidationException $e) {
             return response()->json($e->errors(), 422);
         } catch (\Exception $e) {
@@ -48,17 +48,19 @@ class VehicleInventoryController extends Controller {
     public function inventoryUpdate(Request $request){
         try {
             $request->validate([
-                'items' => 'required|array',
+                'items' => 'array',
                 'service_no' => 'required|numeric',
             ]);
-
+             if($request->items == null){
+                return response()->json(['message' => 'No items to update'], 200);
+             }
             $inventory = $this->inventoryRepo->inventoryUpdate(request: $request);
 
-            
+
             foreach ($inventory as $inventory_item) {
                 $this->logrepo->create('Update', 'Vehicle Inventory', "{$inventory_item->no_of_items_in} number of {$inventory_item->item}(s) are added in the {$inventory_item->service_no}th service after the service.");
             }
-    
+
             if ($inventory) {
                 return response()->json([
                     'inventory' => $inventory

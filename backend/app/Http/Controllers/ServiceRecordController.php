@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CustomerRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\PackagePriceRepository;
 use Illuminate\Http\Request;
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Storage;
 use App\Repositories\LogRepository;
 use Carbon\Carbon;
 use App\Repositories\DamageRepository;
+use App\Repositories\InspectionRepository;
+use App\Repositories\ServiceInventoryRepository;
+use App\Helpers\SmsHelper;
 
 class ServiceRecordController extends Controller
 {
@@ -23,8 +27,10 @@ class ServiceRecordController extends Controller
     protected $packagepricerepo;
     protected $logrepo;
     protected $damageImagesrepo;
+    protected $inspectionrepo;
+    protected $serviceinventoryrepo;
 
-    public function __construct(ServiceRecordRepository $servicerecordrepo, VehicleRepository $vehiclerepo, PackagePriceRepository $packagepricerepo, LogRepository $logrepo, ServiceRecordsPackageRepository $serviceRecordPackagerepo, DamageRepository $damageImagesrepo)
+    public function __construct(ServiceRecordRepository $servicerecordrepo, VehicleRepository $vehiclerepo, PackagePriceRepository $packagepricerepo, LogRepository $logrepo, ServiceRecordsPackageRepository $serviceRecordPackagerepo, DamageRepository $damageImagesrepo, InspectionRepository $inspectionrepo, ServiceInventoryRepository $serviceinventoryrepo, CustomerRepository $customerrepo)
     {
         $this->servicerecordrepo = $servicerecordrepo;
         $this->vehiclerepo = $vehiclerepo;
@@ -32,6 +38,9 @@ class ServiceRecordController extends Controller
         $this->logrepo = $logrepo;
         $this->serviceRecordPackagerepo = $serviceRecordPackagerepo;
         $this->damageImagesrepo = $damageImagesrepo;
+        $this->inspectionrepo = $inspectionrepo;
+        $this->serviceinventoryrepo = $serviceinventoryrepo;
+        $this->customerrepo = $customerrepo;
     }
 
     public function update_damages(Request $request)
@@ -127,10 +136,49 @@ class ServiceRecordController extends Controller
                 $dataRecord = ['status' => 'ONGOING', 'service_no' => $record_id, 'price' => $request->price];
                 $data = ['status' => 'ONGOING', 'service_no' => $record_id];
                 $status = 'ONGOING';
+
+                $inspections = $this->inspectionrepo->search(['service_no' => $record_id]);
+
+                foreach ($inspections as $inspection) {
+                    $inventory = $this->serviceinventoryrepo->findById($inspection->service_inventory_id);
+
+                    if ($inventory) {
+                        $oldQty = $inventory->quantity;
+                        $newQty = max(0, $oldQty - $inspection->quantity);
+
+                        $inventory->update(['quantity' => $newQty]);
+                    }
+                }
+
             } elseif ($request->type === '2') {
                 $dataRecord = ['status' => 'COMPLETED', 'service_no' => $record_id, 'price' => $request->price];
                 $data = ['status' => 'COMPLETED', 'service_no' => $record_id];
                 $status = 'COMPLETED';
+
+                $record = $this->servicerecordrepo->search(['service_no'=>$request->record_id]);
+                $customer = $this->customerrepo->search($record->customer_id, 'id');
+                $customerPhone = $customer->mobile_number;
+                $vehicleNumber = $record->vehicle_number;
+
+                $message = "Dear customer, your vehicle ($vehicleNumber) service has been completed. Thank you for choosing us!";
+                
+                try {
+                    $response = SmsHelper::sendSms($customerPhone, $message);
+                    Log::info('SMS', ['response' => $response]);
+                    if (is_array($response)) {
+                        if (isset($response['status']) && $response['status'] === 'success') {
+                            Log::info('SMS sent successfully', ['to' => $customerPhone, 'response' => $response]);
+                        } else {
+                            Log::warning('SMS sending failed', ['to' => $customerPhone, 'response' => $response]);
+                        }
+                    } else {
+                        Log::error('Unexpected SMS response type', ['response' => $response]);
+                    }
+
+                } catch (\Exception $e) {
+                    Log::error('SMS sending exception', ['error' => $e->getMessage()]);
+                }
+
             }
             $this->servicerecordrepo->update($dataRecord, 'status');
             $this->serviceRecordPackagerepo->update($data, 'status');
@@ -147,21 +195,28 @@ class ServiceRecordController extends Controller
     {
         try {
             $user = Auth::user();
+            $type = $request->input('type'); 
 
             if ($user->role_id === 1) {
                 $service_records = $this->servicerecordrepo->get('', 'completed_admin');
-                return response()->json(["message" => "get completed records successfully", 'data' => $service_records], 200);
-            } else if ($user->role_id === 2) {
+            } 
+            else if ($user->role_id === 2) {
                 $data = ['user_id' => $user->user_id, 'status' => 'COMPLETED'];
                 $service_records = $this->servicerecordrepo->get($data, 'completed');
-                if ($request->type === 'today') {
+
+                if ($type === 'today') {
                     $today = Carbon::today()->toDateString();
-                    $filteredRecords = collect($service_records)->filter(function ($record) use ($today) {
+                    $service_records = collect($service_records)->filter(function ($record) use ($today) {
                         return Carbon::parse($record->date)->toDateString() === $today;
                     })->values();
-                    return response()->json(["message" => "get today completed records successfully", 'data' => $filteredRecords, 'user' => $user], 200);
                 }
             }
+
+            return response()->json([
+                "message" => "Completed records retrieved successfully",
+                "data" => $service_records,
+                "user" => $user
+            ], 200);
 
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);

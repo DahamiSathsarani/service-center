@@ -100,6 +100,7 @@ export default function LubeManagement() {
       data={{ allDetails, serviceTimeRecord }}
       onClickInBtn={clickedInBtn}
       onClickOutBtn={clickedOutBtn}
+      status='lube'
     />
   );
 }

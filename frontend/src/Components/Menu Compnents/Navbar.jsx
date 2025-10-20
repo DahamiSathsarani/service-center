@@ -181,12 +181,23 @@ const Navbar = forwardRef((isSidebarCollapsed, ref) => {
               className="flex items-center space-x-2"
               onClick={onClickProfile}
             >
-              <img
-                src={userData ? userData.profile_picture : images.ProPic}
-                alt="Profile"
-                className="rounded-full object-cover"
-                style={{ width: "50px", height: "50px" }}
-              />
+              {userData?.profile_picture ? (
+                <img
+                  src={userData.profile_picture}
+                  alt="Profile"
+                  className="rounded-full object-cover"
+                  style={{ width: "50px", height: "50px" }}
+                />
+              ) : (
+                <div
+                  className="flex items-center justify-center rounded-full  bg-yellow-400 text-black font-bold"
+                  style={{ width: "50px", height: "50px" }}
+                >
+                  {`${userData?.first_name?.[0] ?? ""} ${
+                    userData?.last_name?.[0] ?? ""
+                  }`.toUpperCase()}
+                </div>
+              )}
               <span className="font-medium hidden md:inline">
                 {userData
                   ? `${userData?.first_name} ${userData?.last_name}`

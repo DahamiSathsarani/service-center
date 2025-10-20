@@ -30,6 +30,8 @@ import OngoingServicesPage from "../Pages/advisor/OngoingServicesPage";
 import ServiceRecordsPage from "../Pages/advisor/ServiceRecordsPage";
 import TakePhotoPage from "../Pages/advisor/TakePhotoPage";
 import UpdateNewCustomerPage from "../Pages/advisor/UpdateNewCustomerPage";
+import MobileNumberPage from "../Pages/advisor/MobileNumberPage";
+import OtpVerificationPage from "../Pages/advisor/OtpVerificationPage";
 
 export default function Advisor() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -129,6 +131,24 @@ export default function Advisor() {
               element={
                 <ProtectedRoutes userRole={userRole} checkedRole={2}>
                   <CustomerCreatePage />
+                </ProtectedRoutes>
+              }
+            />
+
+            <Route
+              path="customer/mobile-number"
+              element={
+                <ProtectedRoutes userRole={userRole} checkedRole={2}>
+                  <MobileNumberPage />
+                </ProtectedRoutes>
+              }
+            />
+
+            <Route
+              path="customer/otp-verification"
+              element={
+                <ProtectedRoutes userRole={userRole} checkedRole={2}>
+                  <OtpVerificationPage />
                 </ProtectedRoutes>
               }
             />

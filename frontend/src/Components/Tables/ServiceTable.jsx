@@ -51,6 +51,9 @@ export default function ServiceTable({ data, userRole }) {
                   <th className="border px-3 py-2 text-center">
                     Customer Name
                   </th>
+                  <th className="border px-3 py-2 text-center">
+                    Contact Number
+                  </th>
                   <th className="border  px-3 py-2 text-center">
                     Vehicle Number
                   </th>
@@ -76,6 +79,9 @@ export default function ServiceTable({ data, userRole }) {
                       </td>
                       <td className="border px-3 py-2 text-center text-sm xl:text-md cursor-pointer hover:bg-gray-100">
                         {record?.customer?.first_name} {record?.customer?.last_name}
+                      </td>
+                       <td className="border px-3 py-2 text-center text-sm xl:text-md cursor-pointer hover:bg-gray-100">
+                        {record?.customer?.mobile_number}
                       </td>
                       <td className="border px-3 py-2 text-center text-sm xl:text-md">
                         {record?.vehicle_number}

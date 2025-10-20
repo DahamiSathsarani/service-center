@@ -4,6 +4,7 @@ use App\Http\Controllers\BayController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\JobTypesController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\PackagePriceController;
 use App\Http\Controllers\ServiceInventoryController;
 use App\Http\Controllers\ServiceRecordController;
@@ -39,6 +40,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('customer/view', [CustomerController::class, 'customerView']);
     Route::get('customers/all/view', [CustomerController::class, 'get_all_customers_details']);
     Route::post('customer/update', [CustomerController::class, 'update_customer_details']);
+    Route::post('customer/send-otp', [CustomerController::class, 'sendOtp']);
+    Route::post('customer/verify-otp', [CustomerController::class, 'verifyOtp']);
+    Route::put('/customer/update-mobile', [CustomerController::class, 'updateMobileNumber']);
 });
 
 /* Vehicle routes */
@@ -134,4 +138,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('serviceinventories/{service_inventory_id}', [ServiceInventoryController::class, 'show']);
     Route::put('serviceinventories/{service_inventory_id}', [ServiceInventoryController::class, 'update']);
     Route::delete('serviceinventories/{service_inventory_id}', [ServiceInventoryController::class, 'destroy']);
+});
+
+/* Logs routes */
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('logs/getall', [LogController::class, 'get_all_logs']);
+    Route::delete('logs/delete/{logId}', [LogController::class, 'delete_log']);
 });

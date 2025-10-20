@@ -98,8 +98,9 @@ const VehicleInventoryForm = ({ type }) => {
       } else if (type === "update") {
         response = await inventory_update(formData);
       }
+      console.log(response.status,"response.status")
       if (response.status === 200) {
-        toast.success(response.data.message || "Records updated successfully");
+        toast.success( "Records updated successfully");
         if (type === "create") {
           if (serviceRecordType === "Full Service") {
             navigate(`/advisor/service-record/${service_no}/service-inventory`);
@@ -113,6 +114,7 @@ const VehicleInventoryForm = ({ type }) => {
         toast.error(response.data.message || "Something went wrong!");
       }
     } catch (error) {
+      console.log("test")
       if (error.response && error.response.status === 422) {
         const errors = error.response.data;
         Object.keys(errors).forEach((key) => {
@@ -132,7 +134,7 @@ const VehicleInventoryForm = ({ type }) => {
       <div className="space-y-6 items-center align-middle">
         <div className="grid grid-cols-3 gap-8 font-bold text-gray-700 border-b pb-2">
           <div>Item</div>
-          <div>No of Items In</div>
+          <div className={`${type === "update" ? "hidden" : "block"}`}>No of Items In</div>
           <div className={`${type === "update" ? "block" : "hidden"}`}>
             No of Items Out
           </div>
@@ -145,8 +147,8 @@ const VehicleInventoryForm = ({ type }) => {
           >
             <div className="text-gray-800">{itemData.item}</div>
 
+           {type === "create" && (
             <div className="flex items-center text-center space-x-6">
-              {type === "create" ? (
                 <>
                   <button
                     type="button"
@@ -166,12 +168,8 @@ const VehicleInventoryForm = ({ type }) => {
                     +
                   </button>
                 </>
-              ) : (
-                <span className="text-center items-center w-4 px-8 font-bold">
-                  {itemData.no_of_items_in}
-                </span>
-              )}
             </div>
+           )}
 
             {type === "update" && (
               <div className="flex items-center text-center space-x-6">

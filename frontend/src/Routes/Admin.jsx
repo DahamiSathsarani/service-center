@@ -13,13 +13,17 @@ import CustomerViewPage from "../Pages/advisor/CustomerViewPage";
 import CustomersViewPage from "../Pages/admin/CustomersViewPage";
 import CustomerCreatePage from "../Pages/advisor/CustomerCreatePage";
 import UserProfile from "../Pages/advisor/UserProfile";
-import AddNewCustomerPage from "../Pages/advisor/AddNewCustomerPage";
+import UpdateNewCustomerPage from "../Pages/advisor/UpdateNewCustomerPage";
 import VehicleViewPage from "../Pages/admin/VehicleViewPage";
 import VehicleCreatePage from "../Pages/advisor/VehicleCreatePage";
 import VehicleUpdatePage from "../Pages/admin/VehicleUpdatePage";
 import ServiceRecordViewPage from "../Pages/admin/ServiceRecordsViewPage";
 import FullForm from "../Pages/advisor/FullForm";
 import ServiceInventory from "../Pages/admin/ServiceInventoryPage";
+import LogsViewPage from "../Pages/admin/LogsViewPage";
+import LiveRecordsPage from "../Pages/admin/LiveRecordsPage";
+import MobileNumberPage from "../Pages/advisor/MobileNumberPage";
+import OtpVerificationPage from "../Pages/advisor/OtpVerificationPage";
 
 export default function Admin() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -98,6 +102,24 @@ export default function Admin() {
             />
 
             <Route
+              path="logs"
+              element={
+                <ProtectedRoutes userRole={userRole} checkedRole={1}>
+                  <LogsViewPage />
+                </ProtectedRoutes>
+              }
+            />
+
+            <Route
+              path="live-records"
+              element={
+                <ProtectedRoutes userRole={userRole} checkedRole={1}>
+                  <LiveRecordsPage />
+                </ProtectedRoutes>
+              }
+            />
+
+            <Route
               path="user/create"
               element={
                 <ProtectedRoutes userRole={userRole} checkedRole={1}>
@@ -114,6 +136,22 @@ export default function Admin() {
               }
             />
             <Route
+              path="customer/mobile-number"
+              element={
+                <ProtectedRoutes userRole={userRole} checkedRole={1}>
+                  <MobileNumberPage userRole="1" />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="customer/otp-verification"
+              element={
+                <ProtectedRoutes userRole={userRole} checkedRole={1}>
+                  <OtpVerificationPage userRole="1" />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
               path="customer/:customer_id/view"
               element={
                 <ProtectedRoutes userRole={userRole} checkedRole={1}>
@@ -125,7 +163,7 @@ export default function Admin() {
               path="customer/:customer_id/update"
               element={
                 <ProtectedRoutes userRole={userRole} checkedRole={1}>
-                  <AddNewCustomerPage userRole="1" />
+                  <UpdateNewCustomerPage userRole="1" />
                 </ProtectedRoutes>
               }
             />

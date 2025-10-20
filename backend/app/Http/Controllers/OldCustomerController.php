@@ -21,7 +21,7 @@ class OldCustomerController extends Controller
         $this->vehiclerepo = $vehiclerepo;
         $this->customerrepo = $customerrepo;
     }
-  
+
     public function oldCustomerCreate(Request $request)
     {
         $vehicle = $this->vehiclerepo->search($request->vehicle_number, 'vehicle_number');
@@ -29,17 +29,32 @@ class OldCustomerController extends Controller
 
         if (!$vehicle) {
             Log::error('Vehicle not found', ['vehicle_number' => $request->vehicle_number]);
-            return response()->json(['error' => 'Vehicle not found'], 404);  
+            return response()->json(['error' => 'Vehicle not found'], 404);
         }
 
         $old_customer = $this->oldCustomerrepo->create($request->vehicle_number, $vehicle->customer_id);
         Log::info('old_customer', ['old_customer' => json_encode($old_customer)]);
 
         if ($request->type === 'create&update') {
+            $request->validate([
+                'first_name' => 'required|string|max:255|regex:/^[a-zA-Z-]+$/',
+                'last_name' => 'required|string|max:255|regex:/^[a-zA-Z-]+$/',
+                'mobile_number' => 'required|string|unique:customers,mobile_number',
+                'email' => 'required|email|unique:customers,email|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+                'dob' => 'required|date',
+                'house_number' => 'string|required',
+                'street_name' => 'string|required',
+                'city' => 'required|string',
+                'state' => 'required|string',
+            ]);
             Log::info('New formdata', ['formdata' => $request]);
             $data = ["first_name" =>  $request->first_name, "last_name" => $request->last_name, "mobile_number" => $request->mobile_number, "email" => $request->email, "house_number" => $request->house_number, "street_name" => $request->street_name, "city" => $request->city, "state" => $request->state, "dob" => $request->dob, "status" => 'ACTIVE'];
             $customer = $this->customerrepo->create($data);
+            $today = now();
+            $customer_code = 'EAZYCARE' . $today->format('Ymd') . $customer->customer_id;
+            $customer->customer_code = $customer_code;
             $customerId = $customer->customer_id;
+            $customer->save();
         } else {
             $customerId = $request->customer_id;
         }
@@ -50,7 +65,7 @@ class OldCustomerController extends Controller
         return response()->json([
             'message' => 'New Customer Updated Successfully',
             'updatedVehicle' => $updatedVehicle
-        ], 200); 
+        ], 200);
     }
 
     public function getOldVehicles($searchValue)
@@ -72,5 +87,4 @@ class OldCustomerController extends Controller
             return response()->json(['message', $e->getMessage()], 500);
         }
     }
-
 }
