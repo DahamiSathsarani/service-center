@@ -137,6 +137,11 @@ class ServiceRecordController extends Controller
                 $data = ['status' => 'ONGOING', 'service_no' => $record_id];
                 $status = 'ONGOING';
 
+                $record = $this->servicerecordrepo->search(['service_no'=>$request->record_id]);
+                $customer = $this->customerrepo->search($record->customer_id, 'id');
+                $customerPhone = $customer->mobile_number;
+                $vehicleNumber = $record->vehicle_number;
+
                 $inspections = $this->inspectionrepo->search(['service_no' => $record_id]);
 
                 foreach ($inspections as $inspection) {
@@ -148,6 +153,25 @@ class ServiceRecordController extends Controller
 
                         $inventory->update(['quantity' => $newQty]);
                     }
+                }
+
+                $message = "Dear customer, your vehicle ($vehicleNumber) service has now started. You'll be notified once it's completed.";
+                
+                try {
+                    $response = SmsHelper::sendSms($customerPhone, $message);
+                    Log::info('SMS', ['response' => $response]);
+                    if (is_array($response)) {
+                        if (isset($response['status']) && $response['status'] === 'success') {
+                            Log::info('SMS sent successfully', ['to' => $customerPhone, 'response' => $response]);
+                        } else {
+                            Log::warning('SMS sending failed', ['to' => $customerPhone, 'response' => $response]);
+                        }
+                    } else {
+                        Log::error('Unexpected SMS response type', ['response' => $response]);
+                    }
+
+                } catch (\Exception $e) {
+                    Log::error('SMS sending exception', ['error' => $e->getMessage()]);
                 }
 
             } elseif ($request->type === '2') {
