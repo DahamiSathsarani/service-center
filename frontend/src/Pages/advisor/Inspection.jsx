@@ -156,8 +156,8 @@ export default function Inspection({ data, type }) {
 
       if (response.status === 200) {
         localStorage.setItem('userAction', JSON.stringify({ action: 'success' }));
-        navigate(0);
-      }
+/*         navigate(0);
+ */      }
     } catch (error) {
       toast.error(error.response?.data?.message || "Server error");
     }

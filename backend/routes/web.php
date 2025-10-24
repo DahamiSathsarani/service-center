@@ -17,6 +17,8 @@ use App\Http\Controllers\UserController;
 */
 Route::get('reset-password/{token}', [UserController::class, 'showResetPasswordForm'])->name('password.reset');
 
-
+Route::get('/',function () {
+    return view('welcome');
+});
 
 

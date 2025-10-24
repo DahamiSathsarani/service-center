@@ -27,7 +27,7 @@ export default function AdvisorDashboard() {
       if (response.data.data && response.data.user) {
         const userId = response.data.user.user_id;
         const filteredRecords = response.data.data.filter(
-          (job) => job.user_id === userId
+          (job) => job.user_id == userId
         );
 
         setCompletedRecords(filteredRecords);
@@ -45,7 +45,7 @@ export default function AdvisorDashboard() {
       if (response.data.data && response.data.user) {
         const userId = response.data.user.user_id;
         const filteredRecords = response.data.data.filter(
-          (job) => job.user_id === userId
+          (job) => job.user_id == userId
         );
 
         setOngoingRecords(filteredRecords);

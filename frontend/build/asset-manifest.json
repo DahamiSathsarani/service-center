@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2ca2de44.css",
+    "main.js": "/static/js/main.ead679e7.js",
+    "static/js/977.3fd645a6.chunk.js": "/static/js/977.3fd645a6.chunk.js",
+    "static/js/732.0eb8fd42.chunk.js": "/static/js/732.0eb8fd42.chunk.js",
+    "static/js/488.7213179a.chunk.js": "/static/js/488.7213179a.chunk.js",
+    "static/media/profile_img.jpg": "/static/media/profile_img.6e5ccc4f9072f0731328.jpg",
+    "static/media/Logo.png": "/static/media/Logo.4c331fa788a8163eb1e7.png",
+    "static/media/sketch.jpg": "/static/media/sketch.9d0701f389fc4babb654.jpg",
+    "static/media/under_wash_icon.png": "/static/media/under_wash_icon.679c5662e9379a3aa087.png",
+    "static/media/lube_icon.png": "/static/media/lube_icon.6dc51d32fdab6250b8a6.png",
+    "static/media/finishing_icon.png": "/static/media/finishing_icon.37a2f8e686078efd3819.png",
+    "static/media/wash_icon.png": "/static/media/wash_icon.cf5cd72dc544731f4527.png",
+    "index.html": "/index.html",
+    "main.2ca2de44.css.map": "/static/css/main.2ca2de44.css.map",
+    "main.ead679e7.js.map": "/static/js/main.ead679e7.js.map",
+    "977.3fd645a6.chunk.js.map": "/static/js/977.3fd645a6.chunk.js.map",
+    "732.0eb8fd42.chunk.js.map": "/static/js/732.0eb8fd42.chunk.js.map",
+    "488.7213179a.chunk.js.map": "/static/js/488.7213179a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2ca2de44.css",
+    "static/js/main.ead679e7.js"
+  ]
+}

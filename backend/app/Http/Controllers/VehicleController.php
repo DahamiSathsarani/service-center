@@ -37,7 +37,7 @@ class VehicleController extends Controller
                 'license_expire_date' => 'required|date',
                 'insurence_expire_date' => 'required|date',
             ]);
-            if ($request->userRole === 1) {
+            if ($request->userRole == 1) {
                 $customer = $this->customerrepo->search($request->mobile_number, 'phone_number');
                 if ($customer) {
                     $data = ['vehicle_number' => $request->vehicle_number, 'type' => $request->type, 'brand' => $request->brand, 'model' => $request->model, 'fuel_type' => $request->fuel_type, 'engine_number' => $request->engine_number, 'license_expire_date' => $request->license_expire_date, 'insurence_expire_date' => $request->insurence_expire_date, 'customer_id' => $customer->customer_id, 'status' => 'ACTIVE'];
