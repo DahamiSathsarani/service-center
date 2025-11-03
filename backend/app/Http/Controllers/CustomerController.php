@@ -40,11 +40,22 @@ class CustomerController extends Controller
                 'email' => 'required|email|unique:customers,email|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
                 'dob' => 'required|date',
                 'house_number' => 'string|required',
-                'street_name' => 'string',
-                'city' => 'string',
-                'state' => 'string',
+                'street_name' => 'nullable|string',
+                'city' => 'nullable|string',
+                'state' => 'nullable|string',
             ]);
-            $customerData = array_merge($request->all(), ['status' => 'ACTIVE']);
+
+            $mobile = $request->mobile_number;
+
+            if (str_starts_with($mobile, '0')) {
+                $mobile = '94' . substr($mobile, 1);
+            }
+
+            $customerData = array_merge($request->all(), [
+                'mobile_number' => $mobile,
+                'status' => 'ACTIVE'
+            ]);
+
             $customer = $this->customerrepo->create($customerData);
             $today = now();
             $customer_code = 'EAZYCARE' . $today->format('Ymd') . $customer->customer_id;
