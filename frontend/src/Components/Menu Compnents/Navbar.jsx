@@ -211,7 +211,7 @@ const Navbar = forwardRef((isSidebarCollapsed, ref) => {
               } absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg p-2`}
             >
               <li>
-                {userRole === 2 ? (
+                {userRole == 2 ? (
                   <Link
                     to="/advisor/user/profile"
                     className="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
@@ -219,7 +219,7 @@ const Navbar = forwardRef((isSidebarCollapsed, ref) => {
                     <FaUserCircle className="mr-2" />
                     Profile
                   </Link>
-                ) : userRole === 1 ? (
+                ) : userRole == 1 ? (
                   <Link
                     to="/admin/user/profile"
                     className="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
