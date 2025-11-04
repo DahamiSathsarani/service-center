@@ -33,7 +33,7 @@ class VehicleController extends Controller
                 'brand' => 'required|string',
                 'model' => 'required|string',
                 'fuel_type' => 'required|string',
-                'engine_number' => 'required|string',
+                'engine_number' => 'nullable|string',
                 'license_expire_date' => 'required|date',
                 'insurence_expire_date' => 'required|date',
             ]);

@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\SmsHelper;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
@@ -39,11 +40,22 @@ class CustomerController extends Controller
                 'email' => 'required|email|unique:customers,email|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
                 'dob' => 'required|date',
                 'house_number' => 'string|required',
-                'street_name' => 'string|required',
-                'city' => 'required|string',
-                'state' => 'required|string',
+                'street_name' => 'nullable|string',
+                'city' => 'nullable|string',
+                'state' => 'nullable|string',
             ]);
-            $customerData = array_merge($request->all(), ['status' => 'ACTIVE']);
+
+            $mobile = $request->mobile_number;
+
+            if (str_starts_with($mobile, '0')) {
+                $mobile = '94' . substr($mobile, 1);
+            }
+
+            $customerData = array_merge($request->all(), [
+                'mobile_number' => $mobile,
+                'status' => 'ACTIVE'
+            ]);
+
             $customer = $this->customerrepo->create($customerData);
             $today = now();
             $customer_code = 'EAZYCARE' . $today->format('Ymd') . $customer->customer_id;
@@ -64,7 +76,13 @@ class CustomerController extends Controller
     public function customerSearch(Request $request)
     {
         try {
-            $customer = $this->customerrepo->search($request->phone_number, 'phone_number');
+            $mobile = $request->phone_number;
+
+            if (str_starts_with($mobile, '0')) {
+                $mobile = '94' . substr($mobile, 1);
+            }
+
+            $customer = $this->customerrepo->search($mobile, 'phone_number');
 
             if ($customer) {
                 return response()->json([
@@ -165,21 +183,26 @@ class CustomerController extends Controller
     public function sendOtp(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'mobile_number' => 'required|string|min:11|max:15',
+            'mobile_number' => 'required|string|min:9|max:15',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
+        $mobile = $request->mobile_number;
+
+        if (str_starts_with($mobile, '0')) {
+            $mobile = '94' . substr($mobile, 1);
+        }
+
         $otp = rand(100000, 999999);
 
-        $this->otprepo->deleteOtps($request->mobile_number);
-
-        $this->otprepo->saveOtp($request->mobile_number, $otp);
+        $this->otprepo->deleteOtps($mobile);
+        $this->otprepo->saveOtp($mobile, $otp);
 
         $message = "Your verification code is: $otp. It will expire in 2 minutes.";
-        $response = SmsHelper::sendSms($request->mobile_number, $message);
+        $response = SmsHelper::sendSms($mobile, $message);
 
         return response()->json([
             'message' => 'OTP sent successfully',
@@ -198,7 +221,13 @@ class CustomerController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $status = $this->otprepo->verifyOtp($request->mobile_number, $request->otp);
+        $mobile = $request->mobile_number;
+
+        if (str_starts_with($mobile, '0')) {
+            $mobile = '94' . substr($mobile, 1);
+        }
+
+        $status = $this->otprepo->verifyOtp($mobile, $request->otp);
 
         switch ($status) {
             case 'valid':
@@ -232,6 +261,12 @@ class CustomerController extends Controller
                 ],
             ], $messages);
 
+            $mobile = $request->mobile_number;
+
+            if (str_starts_with($mobile, '0')) {
+                $mobile = '94' . substr($mobile, 1);
+            }
+
             $customer = $this->customerrepo->search($request->customer_id, 'id');
 
             if (!$customer) {
@@ -240,7 +275,7 @@ class CustomerController extends Controller
 
             $this->customerrepo->update(
                 ['customer_id' => $request->customer_id],
-                ['mobile_number' => $request->mobile_number]
+                ['mobile_number' => $mobile]
             );
 
             $updatedCustomer = $this->customerrepo->search($request->customer_id, 'id');
