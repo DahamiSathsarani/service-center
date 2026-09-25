@@ -2,7 +2,7 @@ import { axiosInstance } from "./BaseAPI";
 
 export const createNotification = async (message) => {
     try {
-        const response = await axiosInstance.post("/notifications/create", {
+        const response = await axiosInstance.post("api/notifications/create", {
             message,
         });
         return response.data;
@@ -14,7 +14,7 @@ export const createNotification = async (message) => {
 
 export const getNotifications = async () => {
     try {
-        const response = await axiosInstance.get("/api/notifications");
+        const response = await axiosInstance.get("api/notifications");
         return response.data;
     } catch (error) {
         console.error("Error fetching notifications:", error);
@@ -24,7 +24,7 @@ export const getNotifications = async () => {
 
 export const getUnreadNotificationCount = async () => {
     try {
-        const response = await axiosInstance.get("/api/notifications/unread-count");
+        const response = await axiosInstance.get("api/notifications/unread-count");
         return response.data.count;
     } catch (error) {
         console.error("Error fetching unread notification count:", error);
@@ -34,7 +34,7 @@ export const getUnreadNotificationCount = async () => {
 
 export const markNotificationAsRead = async (id) => {
     try {
-        const response = await axiosInstance.post(`/api/notifications/mark-as-read/${id}`);
+        const response = await axiosInstance.post(`api/notifications/mark-as-read/${id}`);
         return response.data;
     } catch (error) {
         console.error("Error marking notification as read:", error);
