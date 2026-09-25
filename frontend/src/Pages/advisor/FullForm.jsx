@@ -6,6 +6,7 @@ import {
   get_service_record,
   update_record_details,
 } from "../../Api/ServiceRecordAPI";
+import { Base_Url } from "../../Api/BaseAPI";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import VehicleInventoryTable from "../../Components/Tables/VehicleInventoryTable";
@@ -288,7 +289,7 @@ export default function FullForm({ type, action }) {
               }}
             >
               <img
-                src={`${process.env.REACT_APP_BACKEND_URL}/${recordDetails.damages}`}
+                src={`${Base_Url}/${recordDetails.damages}`}
                 style={{
                   width: "100%",
                   height: "240px",
@@ -369,7 +370,7 @@ export default function FullForm({ type, action }) {
                     }}
                   >
                     <img
-                      src={`${process.env.REACT_APP_BACKEND_URL}/${recordDetails.customer_signature_start}`}
+                      src={`${Base_Url}/${recordDetails.customer_signature_start}`}
                       alt="customer signature"
                       style={{
                         width: "120px",
@@ -443,7 +444,7 @@ export default function FullForm({ type, action }) {
                       }}
                     >
                       <img
-                        src={`${process.env.REACT_APP_BACKEND_URL}/${recordDetails.customer_signature_end}`}
+                        src={`${Base_Url}/${recordDetails.customer_signature_end}`}
                         alt="customer signature"
                         style={{
                           width: "112px",

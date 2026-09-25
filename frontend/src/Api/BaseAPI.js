@@ -2,7 +2,11 @@ import axios from "axios";
 import { getAuthToken, removeAuthToken } from "../Helpers/LocalStorage";
 import { setGlobalLoading } from "../Helpers/LoadingState";
 
-const Base_Url = process.env.REACT_APP_BACKEND_URL;
+export const Base_Url = (
+  process.env.REACT_APP_API_URL ||
+  process.env.REACT_APP_BACKEND_URL ||
+  "https://app.easycare.lk"
+).replace(/\/+$/, "");
 
 const axiosInstance = axios.create({
   baseURL: Base_Url,

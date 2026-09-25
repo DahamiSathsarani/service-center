@@ -19,6 +19,7 @@ import NotFoundPage from "./Pages/common/NotFoundPage";
 
 const App = () => {
   const [userRole, setUserRole] = useState(null);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
 
   useEffect(() => {
     const getUserDetails = async () => {
@@ -27,20 +28,22 @@ const App = () => {
         console.log("response", response);
         if (response.status === 200 && response.data.user.role_id) {
           setUserRole(response.data.user.role_id);
+        } else {
+          setUserRole(0);
         }
       } catch (error) {
         console.log(error.response?.data?.message || "Internal Error");
-        if (error.response?.status === 401) {
-          if (userRole !== 0) setUserRole(0); // Prevent setting multiple times
-        }
+        setUserRole(0);
+      } finally {
+        setIsAuthChecked(true);
       }
     };
 
     getUserDetails();
-    document.title = process.env.REACT_APP_NAME;
+    document.title = process.env.REACT_APP_NAME || "Easy Care Service Center";
   }, []);
 
-  if (userRole === null) return null; // Prevent unnecessary re-renders
+  if (!isAuthChecked && userRole === null) return null;
 
   return (
     <Router>

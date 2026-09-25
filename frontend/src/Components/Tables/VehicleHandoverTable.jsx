@@ -3,6 +3,7 @@ import { get_users_by_user_role } from "../../Api/UserAPI";
 import { FaTimes } from "react-icons/fa";
 import SignaturePad from "../Canvas/SignaturePad";
 import { getHandoverDetails } from "../../Api/VehicleHandoverAPI";
+import { Base_Url } from "../../Api/BaseAPI";
 import { useParams } from "react-router-dom";
 
 export default function VehicleHandoverTable({ finalInspection, action, jobType }) {
@@ -116,7 +117,7 @@ export default function VehicleHandoverTable({ finalInspection, action, jobType 
                 {selectedWheelsInspectorSign ? (
                   <div className="border py-2 px-4 rounded flex bg-white justify-center">
                     <img
-                      src={`${process.env.REACT_APP_BACKEND_URL}/${selectedWheelsInspectorSign}`}
+                      src={`${Base_Url}/${selectedWheelsInspectorSign}`}
                       alt="advisor signature"
                       className="h-[2rem] w-[4rem]"
                     />
@@ -172,7 +173,7 @@ export default function VehicleHandoverTable({ finalInspection, action, jobType 
                 {selectedFinalCheckerSign ? (
                   <div className="border py-2 px-4 flex bg-white justify-center rounded">
                     <img
-                      src={`${process.env.REACT_APP_BACKEND_URL}/${selectedFinalCheckerSign}`}
+                      src={`${Base_Url}/${selectedFinalCheckerSign}`}
                       alt="advisor signature"
                       className="h-[2rem] w-[4rem]"
                     />
