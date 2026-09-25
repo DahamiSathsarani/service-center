@@ -36,6 +36,16 @@ export default function VehicleCreateAndViewForm({ type, data, userRole }) {
     }));
   };
 
+  useEffect(() => {
+      const vehicleAction = JSON.parse(localStorage.getItem("vehicleAction"));
+      if (vehicleAction) {
+        if (vehicleAction.action === "updated") {
+          toast.success("Vehicle Updated Successfully");
+        }
+        localStorage.removeItem("vehicleAction");
+      }
+  }, []);
+
   const fuelTypes = ["PETROL", "DIESEL"];
 
   const vehicleTypes = ["CAR", "SUV", "VAN", "PVAN", "LORRY"];
@@ -72,9 +82,10 @@ export default function VehicleCreateAndViewForm({ type, data, userRole }) {
   const updateVehicleDetails = async (e) => {
     e.preventDefault();
     try {
-      const response = await vehicle_update(formData);
+      const { status, ...updateData } = formData;
+      const response = await vehicle_update(updateData);
       if (response.status === 200) {
-        toast.success("Vehicle Details Updated Successfully");
+        localStorage.setItem("vehicleAction", JSON.stringify({ action: "updated" }));
         navigate(0);
       }
     } catch (error) {

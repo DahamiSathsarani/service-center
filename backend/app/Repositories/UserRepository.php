@@ -101,4 +101,34 @@ class UserRepository
     {
         return $this->users::where('user_id', $user_id)->update([$type => $value]);
     }
+
+    public function admin_update_user($id, $request)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'first_name' => ['required', 'string', "regex:/^[a-zA-Z'-]+$/"],
+            'last_name' => ['required', 'string', "regex:/^[a-zA-Z'-]+$/"],
+            'username' => ['required', 'string'],
+        ]);
+
+        if ($request->hasFile('profile_picture')) {
+            if ($user->profile_picture) {
+                $oldImagePath = str_replace(url('/storage/'), '', $user->profile_picture);
+                Storage::delete('public/' . $oldImagePath);
+            }
+            $imagePath = $request->file('profile_picture')->store('public/profile_pictures');
+            $imageUrl = url(str_replace('public/', 'storage/', $imagePath));
+            $user->profile_picture = $imageUrl;
+            $user->save();
+        }
+
+        $user->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'username' => $request->username,
+        ]);
+
+        return $user->fresh();
+    }
 }

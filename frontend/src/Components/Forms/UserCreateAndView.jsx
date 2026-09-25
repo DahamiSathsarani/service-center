@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import { update_user_details, user_create } from "../../Api/UserAPI";
+import { update_user_details, user_create, admin_update_user } from "../../Api/UserAPI";
 import { images } from "../../assets/Images/images";
 import { Eye, EyeOff, Pencil } from "lucide-react";
+import { getCredentials } from "../../Helpers/LocalStorage";
 
 export default function UserCreateAndView({ type, data }) {
   const navigate = useNavigate();
@@ -14,7 +15,8 @@ export default function UserCreateAndView({ type, data }) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [preview, setPreview] = useState(images.ProPic); // Initial profile pic
 
-  // Handle file selection
+  const { email: loggedInEmail } = getCredentials();
+  const isOwnProfile = type === "view" && data?.email === loggedInEmail;
 
   const [user_data, set_userData] = useState({
     first_name: "",
@@ -66,7 +68,9 @@ export default function UserCreateAndView({ type, data }) {
         formData.append("profile_picture", user_data.profile_picture);
       }
 
-      response = await update_user_details(formData);
+      const response = isOwnProfile
+        ? await update_user_details(formData)
+        : await admin_update_user(user_data.user_id, formData);
 
       if (response.status === 200) {
         const updatedUser = response.data.user;

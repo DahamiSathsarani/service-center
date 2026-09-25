@@ -77,3 +77,12 @@ export async function user_activate(user_id) {
     throw error;
   }
 }
+
+export async function admin_update_user(id, userData) {
+  try {
+    return await axiosInstance.post(`api/user/admin-update/${id}`, userData);
+  } catch (error) {
+    console.error("Admin User Update Error:", error.response?.data || error);
+    throw error;
+  }
+}
