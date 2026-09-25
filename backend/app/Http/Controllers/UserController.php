@@ -186,4 +186,17 @@ class UserController extends Controller
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
+    public function adminUpdateUser(Request $request, $id)
+    {
+        try {
+            $user = $this->userrepo->admin_update_user($id, $request);
+
+            $this->logrepo->create('Update', 'User', "Admin updated user profile successfully ({$user->email})");
+
+            return response()->json(["message" => 'User Updated Successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
 }

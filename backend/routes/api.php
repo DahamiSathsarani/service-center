@@ -31,6 +31,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('user/get/{role_id}', [UserController::class, 'get_users_by_type']);
     Route::put('user/delete/{user_id}', [UserController::class, 'delete_user']);
     Route::put('user/activate/{user_id}', [UserController::class, 'activate_user']);
+    Route::post('user/admin-update/{user_id}', [UserController::class, 'adminUpdateUser']);
 });
 
 /* Customer routes */

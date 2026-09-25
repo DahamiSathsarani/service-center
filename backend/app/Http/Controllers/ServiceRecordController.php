@@ -185,7 +185,7 @@ class ServiceRecordController extends Controller
                 $vehicleNumber = $record->vehicle_number;
 
                 $message = "Dear customer, your vehicle ($vehicleNumber) service has been completed. Thank you for choosing us!";
-                
+
                 try {
                     $response = SmsHelper::sendSms($customerPhone, $message);
                     Log::info('SMS', ['response' => $response]);
@@ -219,12 +219,12 @@ class ServiceRecordController extends Controller
     {
         try {
             $user = Auth::user();
-            $type = $request->input('type'); 
+            $type = $request->input('type');
 
-            if ($user->role_id === 1) {
+            if ($user->role_id == 1) {
                 $service_records = $this->servicerecordrepo->get('', 'completed_admin');
-            } 
-            else if ($user->role_id === 2) {
+            }
+            else if ($user->role_id == 2) {
                 $data = ['user_id' => $user->user_id, 'status' => 'COMPLETED'];
                 $service_records = $this->servicerecordrepo->get($data, 'completed');
 

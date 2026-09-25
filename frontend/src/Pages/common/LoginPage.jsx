@@ -47,9 +47,9 @@ const LoginPage = () => {
           removeCredentials();
         }
         setAuthToken(response.data.token);
-        if (response.data.user_type === 1) {
+        if (response.data.user_type == 1) {
           navigate("/admin/dashboard");
-        } else if (response.data.user_type === 2) {
+        } else if (response.data.user_type == 2) {
           navigate("/advisor/dashboard");
         }
       } 

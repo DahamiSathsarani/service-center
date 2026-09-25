@@ -15,15 +15,15 @@ export default function ServiceTable({ data, userRole }) {
 
   const handleRecordDetailPage = (record_id, status) => {
     if (status === "COMPLETED") {
-      if (userRole === 2) {
+      if (userRole == 2) {
         navigate(`/advisor/service-record/${record_id}/details/2/view`);
-      } else if (userRole === 1) {
+      } else if (userRole == 1) {
         navigate(`/admin/service-record/${record_id}/details/2/view`);
       }
     } else {
-      if (userRole === 2) {
+      if (userRole == 2) {
         navigate(`/advisor/service-record/${record_id}/bay-selection`);
-      } else if (userRole === 1) {
+      } else if (userRole == 1) {
         navigate(`/admin/service-record/${record_id}/details/1/view`);
       }
     }

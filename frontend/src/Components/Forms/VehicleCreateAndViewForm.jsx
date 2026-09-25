@@ -36,6 +36,16 @@ export default function VehicleCreateAndViewForm({ type, data, userRole }) {
     }));
   };
 
+  useEffect(() => {
+      const vehicleAction = JSON.parse(localStorage.getItem("vehicleAction"));
+      if (vehicleAction) {
+        if (vehicleAction.action === "updated") {
+          toast.success("Vehicle Updated Successfully");
+        }
+        localStorage.removeItem("vehicleAction");
+      }
+  }, []);
+
   const fuelTypes = ["PETROL", "DIESEL"];
 
   const vehicleTypes = ["CAR", "SUV", "VAN", "PVAN", "LORRY"];
@@ -72,9 +82,10 @@ export default function VehicleCreateAndViewForm({ type, data, userRole }) {
   const updateVehicleDetails = async (e) => {
     e.preventDefault();
     try {
-      const response = await vehicle_update(formData);
+      const { status, ...updateData } = formData;
+      const response = await vehicle_update(updateData);
       if (response.status === 200) {
-        toast.success("Vehicle Details Updated Successfully");
+        localStorage.setItem("vehicleAction", JSON.stringify({ action: "updated" }));
         navigate(0);
       }
     } catch (error) {
@@ -224,7 +235,7 @@ export default function VehicleCreateAndViewForm({ type, data, userRole }) {
               />
             </div>
           </div>
-          {userRole === 1 && (
+          {userRole == 1 && (
             <div className=" flex flex-col md:flex-row w-full justify-start  md:mb-5">
               <div className="h-[1.5rem] md:h-auto  flex flex-row md:flex-col items-center  md:items-start justify-between w-[100%] md:w-[40%] mt-3 md:mt-0">
                 <label className="md:mb-2 text-mobile_body_label sm:text-tab_body_label lg:text-body_label text-label">
